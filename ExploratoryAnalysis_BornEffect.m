@@ -1,30 +1,33 @@
 %%
 
-X = X0701(:,:,1:2414);
-X(:,21:40,:) = X0702(:,:,1:2414);
-X(:,41:60,:) = X0703(:,:,1:2414);
-X(:,61:80,:) = X0704(:,:,1:2414);
+X = X0806(:,:,1:1805);
+X(:,21:40,:) = X0807(:,:,1:1805);
+X(:,41:60,:) = X0901(:,:,1:1805);
+X(:,61:80,:) = X0902(:,:,1:1805);
+X(:,81:100,:) = X0903(:,:,1:1805);
 
-S = S0701;
-S(:,21:40,:) = S0702;
-S(:,41:60,:) = S0703;
-S(:,61:80,:) = S0704;
+S = S0806;
+S(:,21:40,:) = S0807;
+S(:,41:60,:) = S0901;
+S(:,61:80,:) = S0902;
+S(:,81:100,:) = S0903;
 
-TV = TV0701;
-TV(:,21:40) = TV0702;
-TV(:,41:60) = TV0703;
-TV(:,61:80) = TV0704;
+TV = TV0806;
+TV(:,21:40) = TV0807;
+TV(:,41:60) = TV0901;
+TV(:,61:80) = TV0902;
+TV(:,81:100) = TV0903;
 
 
 %%
 
 for c = 1:8
-    for tr = 1:80
+    for tr = 1:100
         x = squeeze(X(c,tr,:));
         Send = floor(S(c,tr,3));
         Sstart = floor(S(c,tr,2));
         
-        x_posS = x((Send + 40):(Send + 100));
+        x_posS = x((Send + 60):(Send + 120));
         x_preS = x((Sstart - 100):(Sstart - 20));
         
         v_posS = (x_posS(end) - x_posS(1))./0.06;
@@ -142,8 +145,8 @@ plot(x5,'-','color',[0 0 1]);plot(x7,'-','color',[0 1 1]);
 
 %% plot 2
                         
-V_posS(V_posS > 30) = 0;
-V_posS(V_posS < -30) = 0;
+V_posS(V_posS > 25) = 0;
+V_posS(V_posS < -25) = 0;
 % fitobject = fit([TV(2,:),TV(4,:)]',[V_posS(2,:),-V_posS(4,:)]','smoothingspline','SmoothingParam',.2);
 mdl = LinearModel.fit([TV(2,:),TV(4,:)]',[V_posS(2,:),-V_posS(4,:)]');[vfit2, ~] = predict(mdl,(10:0.5:20)');
 R2 = mdl.Rsquared.Adjusted;
@@ -181,6 +184,8 @@ Ydata1 = [V_posS(2,:),-V_posS(4,:)]';
 Xdata1 = [TV(2,:),TV(4,:)]';
 % Ydata1 = [-V_posS(4,:)]';
 % Xdata1 = [TV(4,:)]';
+% Ydata1 = [V_posS(2,:)]';
+% Xdata1 = [TV(2,:)]';
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y1.csv',Ydata1);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X1.csv',Xdata1);
 
@@ -188,6 +193,9 @@ Ydata6 = [V_posS(1,:),-V_posS(3,:)]';
 Xdata6 = [TV(1,:),TV(3,:)]';
 % Ydata6 = [-V_posS(3,:)]';
 % Xdata6 = [TV(3,:)]';
+% Ydata6 = [V_posS(1,:)]';
+% Xdata6 = [TV(1,:)]';
+
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y6.csv',Ydata6);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X6.csv',Xdata6);
 
@@ -196,6 +204,9 @@ Ydata10 = [V_posS(5,:),-V_posS(6,:)]';
 Xdata10 = [TV(5,:),TV(6,:)]';
 % Ydata10 = [-V_posS(6,:)]';
 % Xdata10 = [TV(6,:)]';
+% Ydata10 = [V_posS(5,:)]';
+% Xdata10 = [TV(5,:)]';
+
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y10.csv',Ydata10);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X10.csv',Xdata10);
 
@@ -204,6 +215,9 @@ Ydata20 = [V_posS(7,:),-V_posS(8,:)]';
 Xdata20 = [TV(7,:),TV(8,:)]';
 % Ydata20 = [-V_posS(8,:)]';
 % Xdata20 = [TV(8,:)]';
+% Ydata20 = [V_posS(7,:)]';
+% Xdata20 = [TV(7,:)]';
+
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y20.csv',Ydata20);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
 
@@ -217,3 +231,11 @@ plot(TV(4,:),-V_posS(4,:),'.r','MarkerSize',10)
 plot(TV(3,:),-V_posS(3,:),'.r','MarkerSize',10);
 plot(TV(6,:),-V_posS(6,:),'.r','MarkerSize',10);
 plot(TV(8,:),-V_posS(8,:),'.r','MarkerSize',10);
+
+%% correlation
+[R,P,RLO,RUP]=corrcoef(Ydata1,Xdata1);C1 = R(2,1);C1_lo = RLO(2,1);C1_up = RUP(2,1);
+[R,P,RLO,RUP]=corrcoef(Ydata6,Xdata6);C6 = R(2,1);C6_lo = RLO(2,1);C6_up = RUP(2,1);
+[R,P,RLO,RUP]=corrcoef(Ydata10,Xdata10);C10 = R(2,1);C10_lo = RLO(2,1);C10_up = RUP(2,1);
+[R,P,RLO,RUP]=corrcoef(Ydata20,Xdata20);C20 = R(2,1);C20_lo = RLO(2,1);C20_up = RUP(2,1);
+
+figure;plot(1:4,[C1,C6,C10,C20],'*r');hold on;plot(1:4,[C1_lo,C6_lo,C10_lo,C20_lo],'ob');plot(1:4,[C1_up,C6_up,C10_up,C20_up],'ob');
