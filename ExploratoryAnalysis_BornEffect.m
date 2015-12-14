@@ -1,28 +1,52 @@
 %%
 
-X = X0806(:,:,1:1805);
-X(:,21:40,:) = X0807(:,:,1:1805);
-X(:,41:60,:) = X0901(:,:,1:1805);
-X(:,61:80,:) = X0902(:,:,1:1805);
-X(:,81:100,:) = X0903(:,:,1:1805);
+X = X1401(:,:,1:1806);
+X(:,31:60,:) = X1402(:,:,1:1806);
+X(:,61:90,:) = X1403(:,:,1:1806);
+X(:,91:120,:) = X1404(:,:,1:1806);
+X(:,121:150,:) = X1405(:,:,1:1806);
+X(:,151:180,:) = X1406(:,:,1:1806);
+% X = X1103(:,:,1:1806);
+% X(:,31:60,:) = X1104(:,:,1:1806);
+% X(:,61:90,:) = X1105(:,:,1:1806);
+% X(:,91:120,:) = X1106(:,:,1:1806);
+% X(:,121:150,:) = X1107(:,:,1:1806);
+% X(:,151:180,:) = X1201(:,:,1:1806);
 
-S = S0806;
-S(:,21:40,:) = S0807;
-S(:,41:60,:) = S0901;
-S(:,61:80,:) = S0902;
-S(:,81:100,:) = S0903;
 
-TV = TV0806;
-TV(:,21:40) = TV0807;
-TV(:,41:60) = TV0901;
-TV(:,61:80) = TV0902;
-TV(:,81:100) = TV0903;
+S = S1401;
+S(:,31:60,:) = S1402;
+S(:,61:90,:) = S1403;
+S(:,91:120,:) = S1404;
+S(:,121:150,:) = S1405;
+S(:,151:180,:) = S1406;
+% S = S1103;
+% S(:,31:60,:) = S1104;
+% S(:,61:90,:) = S1105;
+% S(:,91:120,:) = S1106;
+% S(:,121:150,:) = S1107;
+% S(:,151:180,:) = S1201;
+
+
+TV = TV1401;
+TV(:,31:60) = TV1402;
+TV(:,61:90) = TV1403;
+TV(:,91:120) = TV1404;
+TV(:,121:150) = TV1405;
+TV(:,151:180) = TV1406;
+% TV = TV1103;
+% TV(:,31:60) = TV1104;
+% TV(:,61:90) = TV1105;
+% TV(:,91:120) = TV1106;
+% TV(:,121:150) = TV1107;
+% TV(:,151:180) = TV1201;
+
 
 
 %%
 
-for c = 1:8
-    for tr = 1:100
+for c = 1:6
+    for tr = 1:180
         x = squeeze(X(c,tr,:));
         Send = floor(S(c,tr,3));
         Sstart = floor(S(c,tr,2));
@@ -148,12 +172,12 @@ plot(x5,'-','color',[0 0 1]);plot(x7,'-','color',[0 1 1]);
 V_posS(V_posS > 25) = 0;
 V_posS(V_posS < -25) = 0;
 % fitobject = fit([TV(2,:),TV(4,:)]',[V_posS(2,:),-V_posS(4,:)]','smoothingspline','SmoothingParam',.2);
-mdl = LinearModel.fit([TV(2,:),TV(4,:)]',[V_posS(2,:),-V_posS(4,:)]');[vfit2, ~] = predict(mdl,(10:0.5:20)');
+mdl = LinearModel.fit([TV(1,:),TV(2,:)]',[V_posS(1,:),-V_posS(2,:)]');[vfit2, ~] = predict(mdl,(10:0.5:20)');
 R2 = mdl.Rsquared.Adjusted;
 % vfit2 = feval(fitobject,10:0.5:20);
 % fitobject = fit([TV(1,:),TV(3,:)]',[V_posS(1,:),-V_posS(3,:)]','smoothingspline','SmoothingParam',.2);
 % vfit1 = feval(fitobject,10:0.5:20);
-mdl = LinearModel.fit([TV(1,:),TV(3,:)]',[V_posS(1,:),-V_posS(3,:)]');[vfit1, ~] = predict(mdl,(10:0.5:20)');
+mdl = LinearModel.fit([TV(3,:),TV(4,:)]',[V_posS(3,:),-V_posS(4,:)]');[vfit1, ~] = predict(mdl,(10:0.5:20)');
 R1 = mdl.Rsquared.Adjusted;
 % fitobject = fit([TV(5,:),TV(6,:)]',[V_posS(5,:),-V_posS(6,:)]','smoothingspline','SmoothingParam',.2);
 % vfit5 = feval(fitobject,10:0.5:20);
@@ -161,14 +185,14 @@ mdl = LinearModel.fit([TV(5,:),TV(6,:)]',[V_posS(5,:),-V_posS(6,:)]');[vfit5, ~]
 R5 = mdl.Rsquared.Adjusted;
 % fitobject = fit([TV(7,:),TV(8,:)]',[V_posS(7,:),-V_posS(8,:)]','smoothingspline','SmoothingParam',.2);
 % vfit7 = feval(fitobject,10:0.5:20);
-mdl = LinearModel.fit([TV(7,:),TV(8,:)]',[V_posS(7,:),-V_posS(8,:)]');[vfit7, ~] = predict(mdl,(10:0.5:20)');
-R7 = mdl.Rsquared.Adjusted;
+% mdl = LinearModel.fit([TV(7,:),TV(8,:)]',[V_posS(7,:),-V_posS(8,:)]');[vfit7, ~] = predict(mdl,(10:0.5:20)');
+% R7 = mdl.Rsquared.Adjusted;
 
-figure;plot(TV(2,:),V_posS(2,:),'.r','MarkerSize',10);hold on;plot(TV(4,:),-V_posS(4,:),'.r','MarkerSize',10);plot(10:0.5:20,vfit2,'-r','LineWidth',3)
+figure;plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);plot(10:0.5:20,vfit2,'-r','LineWidth',3)
 
-plot(TV(1,:),V_posS(1,:),'.b','MarkerSize',10);hold on;plot(TV(3,:),-V_posS(3,:),'.b','MarkerSize',10);plot(10:0.5:20,vfit1,'-b','LineWidth',3)
-plot(TV(5,:),V_posS(5,:),'.c','MarkerSize',10);hold on;plot(TV(6,:),-V_posS(6,:),'.c','MarkerSize',10);plot(10:0.5:20,vfit5,'-c','LineWidth',3)
-plot(TV(7,:),V_posS(7,:),'.g','MarkerSize',10);hold on;plot(TV(8,:),-V_posS(8,:),'.g','MarkerSize',10);plot(10:0.5:20,vfit7,'-g','LineWidth',3)
+plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);hold on;plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);plot(10:0.5:20,vfit1,'-b','LineWidth',3)
+plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);hold on;plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);plot(10:0.5:20,vfit5,'-c','LineWidth',3)
+% plot(TV(7,:),V_posS(7,:),'.g','MarkerSize',10);hold on;plot(TV(8,:),-V_posS(8,:),'.g','MarkerSize',10);plot(10:0.5:20,vfit7,'-g','LineWidth',3)
 
 % pre- vs post-
 
@@ -180,46 +204,50 @@ plot(TV(7,:),V_posS(7,:),'.g','MarkerSize',10);hold on;plot(TV(8,:),-V_posS(8,:)
 
 %% prediction
 
-Ydata1 = [V_posS(2,:),-V_posS(4,:)]';
-Xdata1 = [TV(2,:),TV(4,:)]';
-% Ydata1 = [-V_posS(4,:)]';
-% Xdata1 = [TV(4,:)]';
-% Ydata1 = [V_posS(2,:)]';
-% Xdata1 = [TV(2,:)]';
-csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y1.csv',Ydata1);
-csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X1.csv',Xdata1);
-
-Ydata6 = [V_posS(1,:),-V_posS(3,:)]';
-Xdata6 = [TV(1,:),TV(3,:)]';
-% Ydata6 = [-V_posS(3,:)]';
-% Xdata6 = [TV(3,:)]';
+Ydata6 = [V_posS(1,:),-V_posS(2,:)]';
+Xdata6 = [TV(1,:),TV(2,:)]';
+% Ydata6 = [-V_posS(2,:)]';
+% Xdata6 = [TV(2,:)]';
 % Ydata6 = [V_posS(1,:)]';
 % Xdata6 = [TV(1,:)]';
-
+% Xdata6(isnan(Ydata6)) = [];
+% Ydata6(isnan(Ydata6)) = [];
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y6.csv',Ydata6);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X6.csv',Xdata6);
-
-
-Ydata10 = [V_posS(5,:),-V_posS(6,:)]';
-Xdata10 = [TV(5,:),TV(6,:)]';
-% Ydata10 = [-V_posS(6,:)]';
-% Xdata10 = [TV(6,:)]';
-% Ydata10 = [V_posS(5,:)]';
-% Xdata10 = [TV(5,:)]';
-
+% 
+Ydata10 = [V_posS(3,:),-V_posS(4,:)]';
+Xdata10 = [TV(3,:),TV(4,:)]';
+% Ydata10 = [-V_posS(4,:)]';
+% Xdata10 = [TV(4,:)]';
+% Ydata10 = [V_posS(3,:)]';
+% Xdata10 = [TV(3,:)]';
+% Xdata10(isnan(Ydata10)) = [];
+% Ydata10(isnan(Ydata10)) = [];
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y10.csv',Ydata10);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X10.csv',Xdata10);
 
 
-Ydata20 = [V_posS(7,:),-V_posS(8,:)]';
-Xdata20 = [TV(7,:),TV(8,:)]';
+Ydata20 = [V_posS(5,:),-V_posS(6,:)]';
+Xdata20 = [TV(5,:),TV(6,:)]';
+% Ydata20 = [-V_posS(6,:)]';
+% Xdata20 = [TV(6,:)]';
+% Ydata20 = [V_posS(5,:)]';
+% Xdata20 = [TV(5,:)]';
+% Xdata20(isnan(Ydata20)) = [];
+% Ydata20(isnan(Ydata20)) = [];
+csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y20.csv',Ydata20);
+csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
+
+
+% Ydata20 = [V_posS(7,:),-V_posS(8,:)]';
+% Xdata20 = [TV(7,:),TV(8,:)]';
 % Ydata20 = [-V_posS(8,:)]';
 % Xdata20 = [TV(8,:)]';
 % Ydata20 = [V_posS(7,:)]';
 % Xdata20 = [TV(7,:)]';
 
-csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y20.csv',Ydata20);
-csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
+% csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y20.csv',Ydata20);
+% csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
 
 
 %%
@@ -233,9 +261,19 @@ plot(TV(6,:),-V_posS(6,:),'.r','MarkerSize',10);
 plot(TV(8,:),-V_posS(8,:),'.r','MarkerSize',10);
 
 %% correlation
-[R,P,RLO,RUP]=corrcoef(Ydata1,Xdata1);C1 = R(2,1);C1_lo = RLO(2,1);C1_up = RUP(2,1);
+% [R,P,RLO,RUP]=corrcoef(Ydata1,Xdata1);C1 = R(2,1);C1_lo = RLO(2,1);C1_up = RUP(2,1);
 [R,P,RLO,RUP]=corrcoef(Ydata6,Xdata6);C6 = R(2,1);C6_lo = RLO(2,1);C6_up = RUP(2,1);
 [R,P,RLO,RUP]=corrcoef(Ydata10,Xdata10);C10 = R(2,1);C10_lo = RLO(2,1);C10_up = RUP(2,1);
 [R,P,RLO,RUP]=corrcoef(Ydata20,Xdata20);C20 = R(2,1);C20_lo = RLO(2,1);C20_up = RUP(2,1);
 
-figure;plot(1:4,[C1,C6,C10,C20],'*r');hold on;plot(1:4,[C1_lo,C6_lo,C10_lo,C20_lo],'ob');plot(1:4,[C1_up,C6_up,C10_up,C20_up],'ob');
+figure;plot([4,12,20],[C6,C10,C20],'*r');hold on;plot([4,12,20],[C6_lo,C10_lo,C20_lo],'ob');plot([4,12,20],[C6_up,C10_up,C20_up],'ob');
+
+%% MSE
+MSE_6 = nanmean((Ydata6 - Xdata6).^2);
+MSE_10 = nanmean((Ydata10 - Xdata10).^2);
+MSE_20 = nanmean((Ydata20 - Xdata20).^2);
+mse_ci6 = bootci(2000,{@(x)nanmean((x(:,1) - x(:,2)).^2),[Ydata6,Xdata6]},'type','norm');
+mse_ci10 = bootci(2000,{@(x)nanmean((x(:,1) - x(:,2)).^2),[Ydata10,Xdata10]},'type','norm');
+mse_ci20 = bootci(2000,{@(x)nanmean((x(:,1) - x(:,2)).^2),[Ydata20,Xdata20]},'type','norm');
+
+figure;plot([4,12,20],[MSE_6,MSE_10,MSE_20],'*r');hold on;plot([4,12,20],[mse_ci6(1),mse_ci10(1),mse_ci20(1)],'ob');plot([4,12,20],[mse_ci6(2),mse_ci10(2),mse_ci20(2)],'ob');

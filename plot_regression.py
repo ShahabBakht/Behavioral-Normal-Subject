@@ -35,10 +35,10 @@ from sklearn import linear_model
 
 ###############################################################################
 # Load data
-Xdata1 = genfromtxt('X1.csv', delimiter=',')
-Xd1 = np.matrix(Xdata1).reshape(-1,1)
-Ydata1 = genfromtxt('Y1.csv', delimiter=',')
-Yd1 = np.matrix(Ydata1).reshape(-1,1)
+#Xdata1 = genfromtxt('X1.csv', delimiter=',')
+#Xd1 = np.matrix(Xdata1).reshape(-1,1)
+#Ydata1 = genfromtxt('Y1.csv', delimiter=',')
+#Yd1 = np.matrix(Ydata1).reshape(-1,1)
 
 Xdata6 = genfromtxt('X6.csv', delimiter=',')
 Xd6 = np.matrix(Xdata6).reshape(-1,1)
@@ -176,10 +176,10 @@ plt.show()
 ###############################################################################
 # Bayesian Regression
 clf = linear_model.BayesianRidge(compute_score=True)
-y1_ = clf.fit(Xd1, Yd1).predict(T)
-c1 = clf.coef_
-a1 = clf.alpha_
-l1 = clf.lambda_
+#y1_ = clf.fit(Xd1, Yd1).predict(T)
+#c1 = clf.coef_
+#a1 = clf.alpha_
+#l1 = clf.lambda_
 
 y6_ = clf.fit(Xd6, Yd6).predict(T)
 c6 = clf.coef_
@@ -196,20 +196,20 @@ c20 = clf.coef_
 a20 = clf.alpha_
 l20 = clf.lambda_
 
-fig1 = plt.figure()
-plt.scatter(Xd1, Yd1, c='k', label='data')
-line_1, = plt.plot(T, y1_, 'k', label='1 degree')
-plt.text(10, 18, r'$p(V_e|V_t,\omega,\alpha) = \mathcal{N}(V_e|V_t\omega,\alpha)$')
-plt.text(10, 17, r'$p(\omega|\lambda) = \mathcal{N}(\omega|0,\lambda^{-1})$')
-plt.text(10, 16, r'$\omega = %.3f$' % (c1))
-plt.text(10, 15, r'$\alpha = %.3f$' % (a1))
-plt.text(10, 14, r'$\lambda = %.3f$' % (l1))
-plt.axis([9,21,-5,20])
-plt.title("Bayesian Regression - d = 1 degree")
-plt.xlabel('Target Velocity (degree/s)')
-plt.ylabel('Eye Velocity (degree/s)')
-
-plt.show()
+#fig1 = plt.figure()
+#plt.scatter(Xd1, Yd1, c='k', label='data')
+#line_1, = plt.plot(T, y1_, 'k', label='1 degree')
+#plt.text(10, 18, r'$p(V_e|V_t,\omega,\alpha) = \mathcal{N}(V_e|V_t\omega,\alpha)$')
+#plt.text(10, 17, r'$p(\omega|\lambda) = \mathcal{N}(\omega|0,\lambda^{-1})$')
+#plt.text(10, 16, r'$\omega = %.3f$' % (c1))
+#plt.text(10, 15, r'$\alpha = %.3f$' % (a1))
+#plt.text(10, 14, r'$\lambda = %.3f$' % (l1))
+#plt.axis([9,21,-5,20])
+#plt.title("Bayesian Regression - d = 1 degree")
+#plt.xlabel('Target Velocity (degree/s)')
+#plt.ylabel('Eye Velocity (degree/s)')
+#
+#plt.show()
 
 fig2 = plt.figure()
 plt.scatter(Xd6, Yd6, c='b', label='data')
@@ -257,27 +257,27 @@ plt.show()
 # Bayesian Regression x-validation
 
 clf = linear_model.BayesianRidge(compute_score=True)
-kf = KFold(160, n_folds=160)
-c = np.empty([160,1])
-a = np.empty([160,1])
-l = np.empty([160,1])
-Error = np.empty([160,1])
+kf = KFold(200, n_folds=200)
+c = np.empty([200,1])
+a = np.empty([200,1])
+l = np.empty([200,1])
+Error = np.empty([200,1])
 i = 0
-for train, test in kf:
-    
-    X_train, X_test, y_train, y_test = Xd1[train], Xd1[test], Yd1[train], Yd1[test]
-    clf.fit(X_train, y_train)
-    y1_ = clf.predict(X_test)
-    Error[i] = (y1_-y_test)**2
-    c[i] = clf.coef_
-    a[i] = clf.alpha_
-    l[i] = clf.lambda_
-    i += 1
-    
-Error1 = np.sqrt(np.mean(Error))
-c1 = np.sqrt(np.mean(c))
-a1 = np.sqrt(np.mean(a))
-l1 = np.sqrt(np.mean(l))
+#for train, test in kf:
+#    
+#    X_train, X_test, y_train, y_test = Xd1[train], Xd1[test], Yd1[train], Yd1[test]
+#    clf.fit(X_train, y_train)
+#    y1_ = clf.predict(X_test)
+#    Error[i] = (y1_-y_test)**2
+#    c[i] = clf.coef_
+#    a[i] = clf.alpha_
+#    l[i] = clf.lambda_
+#    i += 1
+#    
+#Error1 = np.sqrt(np.mean(Error))
+#c1 = np.sqrt(np.mean(c))
+#a1 = np.sqrt(np.mean(a))
+#l1 = np.sqrt(np.mean(l))
 
 
 i = 0
@@ -314,7 +314,7 @@ c10 = np.sqrt(np.mean(c))
 a10 = np.sqrt(np.mean(a))
 l10 = np.sqrt(np.mean(l))
 
-Error = np.empty([160,1])
+Error = np.empty([200,1])
 i = 0
 for train, test in kf:
     
@@ -338,7 +338,7 @@ plt.xlabel('Dots Diameter');plt.ylabel('X-validation MSE');plt.title('Bayesian R
 plt.show()
 
 fig2 = plt.figure()
-plt.plot([1,6,10,20], [c1,c6,c10,c20], '-k', [1,6,10,20], [c1,c6,c10,c20], 'ob')
+plt.plot([6,10,20], [c6,c10,c20], '-k', [6,10,20], [c6,c10,c20], 'ob')
 plt.xlabel('Dots Diameter');plt.ylabel('coefficient');plt.title('Bayesian Regression')
 plt.grid(True)
 plt.show()
