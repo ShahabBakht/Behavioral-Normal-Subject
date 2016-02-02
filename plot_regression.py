@@ -10,10 +10,8 @@ target using both barycenter and constant weights.
 """
 print(__doc__)
 
-# Author: Alexandre Gramfort <alexandre.gramfort@inria.fr>
-#         Fabian Pedregosa <fabian.pedregosa@inria.fr>
-#
-# License: BSD 3 clause (C) INRIA
+# Author: Shahab Bakhtiari <shahab.bakhtiari@mail.mcgill.ca>
+
 
 
 ###############################################################################
@@ -257,11 +255,11 @@ plt.show()
 # Bayesian Regression x-validation
 
 clf = linear_model.BayesianRidge(compute_score=True)
-kf = KFold(200, n_folds=200)
-c = np.empty([200,1])
-a = np.empty([200,1])
-l = np.empty([200,1])
-Error = np.empty([200,1])
+kf = KFold(235, n_folds=235)
+c = np.empty([235,1])
+a = np.empty([235,1])
+l = np.empty([235,1])
+Error = np.empty([235,1])
 i = 0
 #for train, test in kf:
 #    
@@ -297,6 +295,11 @@ c6 = np.sqrt(np.mean(c))
 a6 = np.sqrt(np.mean(a))
 l6 = np.sqrt(np.mean(l))
 
+kf = KFold(235, n_folds=235)
+c = np.empty([235,1])
+a = np.empty([235,1])
+l = np.empty([235,1])
+Error = np.empty([235,1])
 i = 0
 for train, test in kf:
     
@@ -314,7 +317,12 @@ c10 = np.sqrt(np.mean(c))
 a10 = np.sqrt(np.mean(a))
 l10 = np.sqrt(np.mean(l))
 
-Error = np.empty([200,1])
+
+kf = KFold(235, n_folds=235)
+c = np.empty([235,1])
+a = np.empty([235,1])
+l = np.empty([235,1])
+Error = np.empty([235,1])
 i = 0
 for train, test in kf:
     
@@ -333,7 +341,7 @@ a20 = np.sqrt(np.mean(a))
 l20 = np.sqrt(np.mean(l))
 
 fig = plt.figure()
-plt.plot([1,6,10,20], [Error1,Error6,Error10,Error20], '-k', [1,6,10,20], [Error1,Error6,Error10,Error20], 'ob')
+plt.plot([6,10,20], [Error6,Error10,Error20], '-k', [6,10,20], [Error6,Error10,Error20], 'ob')
 plt.xlabel('Dots Diameter');plt.ylabel('X-validation MSE');plt.title('Bayesian Regression')
 plt.show()
 
@@ -344,13 +352,13 @@ plt.grid(True)
 plt.show()
 
 fig3 = plt.figure()
-plt.plot([1,6,10,20], [a1,a6,a10,a20], '-k', [1,6,10,20], [a1,a6,a10,a20], 'ob')
+plt.plot([6,10,20], [a6,a10,a20], '-k', [6,10,20], [a6,a10,a20], 'ob')
 plt.xlabel('Dots Diameter');plt.ylabel('alpha');plt.title('Bayesian Regression')
 plt.grid(True)
 plt.show()
 
 fig4 = plt.figure()
-plt.plot([1,6,10,20], [l1,l6,l10,l20], '-k', [1,6,10,20], [l1,l6,l10,l20], 'ob')
+plt.plot([6,10,20], [l6,l10,l20], '-k', [6,10,20], [l6,l10,l20], 'ob')
 plt.xlabel('Dots Diameter');plt.ylabel('lambda');plt.title('Bayesian Regression')
 plt.grid(True)
 plt.show()

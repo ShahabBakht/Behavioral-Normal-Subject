@@ -1,11 +1,14 @@
 %%
 
-X = X1401(:,:,1:1806);
-X(:,31:60,:) = X1402(:,:,1:1806);
-X(:,61:90,:) = X1403(:,:,1:1806);
-X(:,91:120,:) = X1404(:,:,1:1806);
-X(:,121:150,:) = X1405(:,:,1:1806);
-X(:,151:180,:) = X1406(:,:,1:1806);
+X = X1901(:,:,1:1805);
+X(:,31:60,:) = X1902(:,:,1:1805);
+X(:,61:90,:) = X1903(:,:,1:1805);
+X(:,91:120,:) = X1904(:,:,1:1805);
+X(:,121:150,:) = X1905(:,:,1:1805);
+X(:,151:180,:) = X2001(:,:,1:1805);
+X(:,181:210,:) = X2002(:,:,1:1805);
+X(:,211:240,:) = X2003(:,:,1:1805);
+% X(:,151:180,:) = X1406(:,:,1:1808);
 % X = X1103(:,:,1:1806);
 % X(:,31:60,:) = X1104(:,:,1:1806);
 % X(:,61:90,:) = X1105(:,:,1:1806);
@@ -14,12 +17,15 @@ X(:,151:180,:) = X1406(:,:,1:1806);
 % X(:,151:180,:) = X1201(:,:,1:1806);
 
 
-S = S1401;
-S(:,31:60,:) = S1402;
-S(:,61:90,:) = S1403;
-S(:,91:120,:) = S1404;
-S(:,121:150,:) = S1405;
-S(:,151:180,:) = S1406;
+S = S1901;
+S(:,31:60,:) = S1902;
+S(:,61:90,:) = S1903;
+S(:,91:120,:) = S1904;
+S(:,121:150,:) = S1905;
+S(:,151:180,:) = S2001;
+S(:,181:210,:) = S2002;
+S(:,211:240,:) = S2003;
+% S(:,151:180,:) = S1806;
 % S = S1103;
 % S(:,31:60,:) = S1104;
 % S(:,61:90,:) = S1105;
@@ -28,12 +34,16 @@ S(:,151:180,:) = S1406;
 % S(:,151:180,:) = S1201;
 
 
-TV = TV1401;
-TV(:,31:60) = TV1402;
-TV(:,61:90) = TV1403;
-TV(:,91:120) = TV1404;
-TV(:,121:150) = TV1405;
-TV(:,151:180) = TV1406;
+TV = TV1901;
+TV(:,31:60) = TV1902;
+TV(:,61:90) = TV1903;
+TV(:,91:120) = TV1904;
+TV(:,121:150) = TV1905;
+TV(:,151:180) = TV2001;
+TV(:,181:210) = TV2002;
+TV(:,211:240) = TV2003;
+
+% TV(:,151:180) = TV1806;
 % TV = TV1103;
 % TV(:,31:60) = TV1104;
 % TV(:,61:90) = TV1105;
@@ -46,24 +56,31 @@ TV(:,151:180) = TV1406;
 %%
 
 for c = 1:6
-    for tr = 1:180
+    for tr = 1:240
         x = squeeze(X(c,tr,:));
         Send = floor(S(c,tr,3));
         Sstart = floor(S(c,tr,2));
+        if length(x) < Send + 120
+            x_posS = [];
+            v_posS = [];
+            X_posS(c,tr,:) = nan;
+            V_posS(c,tr,:) = nan;
+        else
+            x_posS = x((Send + 60):(Send + 120));
+            v_posS = (x_posS(end) - x_posS(1))./0.06;
+            X_posS(c,tr,:) = x_posS;
+            V_posS(c,tr,:) = v_posS;
+        end
         
-        x_posS = x((Send + 60):(Send + 120));
         x_preS = x((Sstart - 100):(Sstart - 20));
-        
-        v_posS = (x_posS(end) - x_posS(1))./0.06;
         v_preS = (x_preS(end) - x_preS(1))./0.08;
         
 %         y = squeeze(Y(c,tr,:));
 %         y_posS = y((Send + 40):(Send + 100));
 %         y_preS = y((Sstart - 100):(Sstart - 20));
 %         
-        X_posS(c,tr,:) = x_posS;
+        
         X_preS(c,tr,:) = x_preS;
-        V_posS(c,tr,:) = v_posS;
         V_preS(c,tr,:) = v_preS;
         
 %         Y_posS(c,tr,:) = y_posS;
@@ -169,8 +186,8 @@ plot(x5,'-','color',[0 0 1]);plot(x7,'-','color',[0 1 1]);
 
 %% plot 2
                         
-V_posS(V_posS > 25) = 0;
-V_posS(V_posS < -25) = 0;
+V_posS(V_posS > 25) = nan;
+V_posS(V_posS < -25) = nan;
 % fitobject = fit([TV(2,:),TV(4,:)]',[V_posS(2,:),-V_posS(4,:)]','smoothingspline','SmoothingParam',.2);
 mdl = LinearModel.fit([TV(1,:),TV(2,:)]',[V_posS(1,:),-V_posS(2,:)]');[vfit2, ~] = predict(mdl,(10:0.5:20)');
 R2 = mdl.Rsquared.Adjusted;
@@ -204,37 +221,37 @@ plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);hold on;plot(TV(6,:),-V_posS(6,:)
 
 %% prediction
 
-Ydata6 = [V_posS(1,:),-V_posS(2,:)]';
-Xdata6 = [TV(1,:),TV(2,:)]';
-% Ydata6 = [-V_posS(2,:)]';
-% Xdata6 = [TV(2,:)]';
+% Ydata6 = [V_posS(1,:),-V_posS(2,:)]';
+% Xdata6 = [TV(1,:),TV(2,:)]';
+Ydata6 = [-V_posS(2,:)]';
+Xdata6 = [TV(2,:)]';
 % Ydata6 = [V_posS(1,:)]';
 % Xdata6 = [TV(1,:)]';
-% Xdata6(isnan(Ydata6)) = [];
-% Ydata6(isnan(Ydata6)) = [];
+Xdata6(isnan(Ydata6)) = [];
+Ydata6(isnan(Ydata6)) = [];
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y6.csv',Ydata6);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X6.csv',Xdata6);
 % 
-Ydata10 = [V_posS(3,:),-V_posS(4,:)]';
-Xdata10 = [TV(3,:),TV(4,:)]';
-% Ydata10 = [-V_posS(4,:)]';
-% Xdata10 = [TV(4,:)]';
+% Ydata10 = [V_posS(3,:),-V_posS(4,:)]';
+% Xdata10 = [TV(3,:),TV(4,:)]';
+Ydata10 = [-V_posS(4,:)]';
+Xdata10 = [TV(4,:)]';
 % Ydata10 = [V_posS(3,:)]';
 % Xdata10 = [TV(3,:)]';
-% Xdata10(isnan(Ydata10)) = [];
-% Ydata10(isnan(Ydata10)) = [];
+Xdata10(isnan(Ydata10)) = [];
+Ydata10(isnan(Ydata10)) = [];
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y10.csv',Ydata10);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X10.csv',Xdata10);
 
 
-Ydata20 = [V_posS(5,:),-V_posS(6,:)]';
-Xdata20 = [TV(5,:),TV(6,:)]';
-% Ydata20 = [-V_posS(6,:)]';
-% Xdata20 = [TV(6,:)]';
+% Ydata20 = [V_posS(5,:),-V_posS(6,:)]';
+% Xdata20 = [TV(5,:),TV(6,:)]';
+Ydata20 = [-V_posS(6,:)]';
+Xdata20 = [TV(6,:)]';
 % Ydata20 = [V_posS(5,:)]';
 % Xdata20 = [TV(5,:)]';
-% Xdata20(isnan(Ydata20)) = [];
-% Ydata20(isnan(Ydata20)) = [];
+Xdata20(isnan(Ydata20)) = [];
+Ydata20(isnan(Ydata20)) = [];
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y20.csv',Ydata20);
 csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
 
@@ -266,14 +283,21 @@ plot(TV(8,:),-V_posS(8,:),'.r','MarkerSize',10);
 [R,P,RLO,RUP]=corrcoef(Ydata10,Xdata10);C10 = R(2,1);C10_lo = RLO(2,1);C10_up = RUP(2,1);
 [R,P,RLO,RUP]=corrcoef(Ydata20,Xdata20);C20 = R(2,1);C20_lo = RLO(2,1);C20_up = RUP(2,1);
 
-figure;plot([4,12,20],[C6,C10,C20],'*r');hold on;plot([4,12,20],[C6_lo,C10_lo,C20_lo],'ob');plot([4,12,20],[C6_up,C10_up,C20_up],'ob');
+figure;plot([4,12,20],[C6,C10,C20],'-r');hold on;plot([4,12,20],[C6_lo,C10_lo,C20_lo],'-b');plot([4,12,20],[C6_up,C10_up,C20_up],'-b');
 
-%% MSE
-MSE_6 = nanmean((Ydata6 - Xdata6).^2);
-MSE_10 = nanmean((Ydata10 - Xdata10).^2);
-MSE_20 = nanmean((Ydata20 - Xdata20).^2);
-mse_ci6 = bootci(2000,{@(x)nanmean((x(:,1) - x(:,2)).^2),[Ydata6,Xdata6]},'type','norm');
-mse_ci10 = bootci(2000,{@(x)nanmean((x(:,1) - x(:,2)).^2),[Ydata10,Xdata10]},'type','norm');
-mse_ci20 = bootci(2000,{@(x)nanmean((x(:,1) - x(:,2)).^2),[Ydata20,Xdata20]},'type','norm');
+%% SVD
 
-figure;plot([4,12,20],[MSE_6,MSE_10,MSE_20],'*r');hold on;plot([4,12,20],[mse_ci6(1),mse_ci10(1),mse_ci20(1)],'ob');plot([4,12,20],[mse_ci6(2),mse_ci10(2),mse_ci20(2)],'ob');
+
+[coeff6,score6,latent6,~,explained6,mu6] = pca([Ydata6,Xdata6]);Eidx6 = explained6(1)/100;
+[coeff10,score10,latent10,~,explained10,mu10] = pca([Ydata10,Xdata10]);Eidx10 = explained10(1)/100;
+[coeff20,score20,latent20,~,explained20,mu20] = pca([Ydata20,Xdata20]);Eidx20 = explained20(1)/100;
+
+idx_ci6 = bootci(20000,{@(x)EllipticalIndex(x),[Ydata6,Xdata6]},'type','norm');
+idx_ci10 = bootci(20000,{@(x)EllipticalIndex(x),[Ydata10,Xdata10]},'type','norm');
+idx_ci20 = bootci(20000,{@(x)EllipticalIndex(x),[Ydata20,Xdata20]},'type','norm');
+
+figure;plot([4,12,20],[Eidx6,Eidx10,Eidx20],'b')
+figure;plot([4,12,20],[idx_ci6(1),idx_ci10(1),idx_ci20(1)],'r');hold on
+plot([4,12,20],[idx_ci6(2),idx_ci10(2),idx_ci20(2)],'r');
+
+
