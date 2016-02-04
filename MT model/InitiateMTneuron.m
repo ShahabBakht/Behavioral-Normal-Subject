@@ -8,8 +8,8 @@ S.G       =       1;      % Gain
 
 %% Target Motion Parameters;
 
-Target.MotionSpeed        =   100;
-Target.MotionDirection    =   150;
+Target.MotionSpeed        =   10 * rand(500,1) + 10;
+Target.MotionDirection    =   150 * ones(500,1);
 
 %%
 

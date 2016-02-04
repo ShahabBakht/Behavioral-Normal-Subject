@@ -41,7 +41,7 @@ classdef MTneuron < handle
                 DDiff = (Theta - PD);
             end
             
-            FR = G * exp(-( DDiff^2 )/( 2 * DTW^2 )) * exp(-( (log2(S) - (PS))^2 )/( 2 * STW^2 )); 
+            FR = G * exp(-( DDiff.^2 )/( 2 * DTW^2 )) .* exp(-( (log2(S) - (PS)).^2 )./( 2 * STW^2 )); 
             
             MT.FiringRate = FR;
             
@@ -50,7 +50,7 @@ classdef MTneuron < handle
         function SimulateVariance(MT)
             
             c = 1;
-            MT.Variance = c * MT.FiringRate;
+            MT.Variance = c * mean(MT.FiringRate);
             
         end
     end

@@ -22,7 +22,7 @@ for neuroncount = 1:Nps*Npd
     fprintf([num2str(neuroncount), ' neurons simulated \n'])
     S.PS      =       PSmesh(neuroncount);     % Preferred Speed
     S.PD      =       PDmesh(neuroncount);     % Preferred Direction
-    S.STW     =       1.45;                    % Width of Speed Tuning Curve
+    S.STW     =       (1.45);                    % Width of Speed Tuning Curve
     S.DTW     =       98*pi/180;               % Width of Direction Tuning Curve
     S.G       =       11.5;                    % Gain
     
@@ -38,7 +38,8 @@ COV = ConstructCovariance(mtpopulation,rmax);
 
 % R = nan(Nps*Npd,NumTrials);
 
-R = MCsimulate(mtpopulation,COV,NumTrials)';
+R = MCsimulate(mtpopulation,COV)';
+% R = MCsimulate(mtpopulation,COV,NumTrials)';
 
 
 toc;
@@ -46,12 +47,12 @@ end
 
 function COV = ConstructCovariance(mtpopulation,rmax)
 
-global Nps Npd MinSpeed MaxSpeed MinDirection MaxDirection;
+global Nps Npd MinSpeed MaxSpeed;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % correlations parameters
 % rmax    =      0.3;
 td      =      1;
-ts      =      1;
+ts      =      .5;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 fprintf(['Calculating Covariance Matrix ... '])
 PD = cellfun(@(x)(x.PreferredDirection),mtpopulation)';
@@ -71,16 +72,17 @@ COV = Q * Q';
 
 end
 
-function R = MCsimulate(mtpopulation,COV,NumTrials)
+function R = MCsimulate(mtpopulation,COV)
 global Nps Npd
 
 for ncount = 1:(Nps*Npd)
     MT = mtpopulation{ncount};
-    mu(ncount) = MT.FiringRate;
+    mu(:,ncount) = MT.FiringRate;
     clear MT
 end
 
-R = mvnrnd(mu',COV,NumTrials);
+R = mvnrnd(mu,COV);
+% R = mvnrnd(mu,COV,NumTrials);
 
 end
 
