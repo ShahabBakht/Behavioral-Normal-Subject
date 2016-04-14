@@ -1,7 +1,7 @@
 function [TargetEstimate] = DecodeMTpopulation(mtpopulation, R)
 
 %%%%%%%%%%%%%%%%
-epcilon = .05;
+epcilon = .01;
 %%%%%%%%%%%%%%%%
 
 for i = 1:length(mtpopulation)

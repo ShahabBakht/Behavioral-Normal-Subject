@@ -54,7 +54,7 @@ Ydata20 = genfromtxt('Y20.csv', delimiter=',')
 Yd20 = np.matrix(Ydata20).reshape(-1,1)
 
 
-T = np.linspace(10, 20, 20)[:, np.newaxis];
+T = np.linspace(5, 20, 20)[:, np.newaxis];
 
 ###############################################################################
 # Fit regression model
@@ -173,7 +173,7 @@ plt.show()
 
 ###############################################################################
 # Bayesian Regression
-clf = linear_model.BayesianRidge(compute_score=True)
+clf = linear_model.BayesianRidge(compute_score=True,normalize=True)
 #y1_ = clf.fit(Xd1, Yd1).predict(T)
 #c1 = clf.coef_
 #a1 = clf.alpha_
@@ -211,13 +211,13 @@ l20 = clf.lambda_
 
 fig2 = plt.figure()
 plt.scatter(Xd6, Yd6, c='b', label='data')
-line_1, = plt.plot(T, y6_, 'k', label='1 degree')
-plt.text(10, 18, r'$p(V_e|V_t,\omega,\alpha) = \mathcal{N}(V_e|V_t\omega,\alpha)$')
-plt.text(10, 17, r'$p(\omega|\lambda) = \mathcal{N}(\omega|0,\lambda^{-1})$')
-plt.text(10, 16, r'$\omega = %.3f$' % (c6))
-plt.text(10, 15, r'$\alpha = %.3f$' % (a6))
-plt.text(10, 14, r'$\lambda = %.3f$' % (l6))
-plt.axis([9,21,-5,20])
+line_1, = plt.plot(T, y6_, 'b', label='1 degree')
+plt.text(2, 18, r'$p(V_e|V_t,\omega,\alpha) = \mathcal{N}(V_e|V_t\omega,\alpha)$')
+plt.text(2, 17, r'$p(\omega|\lambda) = \mathcal{N}(\omega|0,\lambda^{-1})$')
+plt.text(2, 16, r'$\omega = %.3f$' % (c6))
+plt.text(2, 15, r'$\alpha = %.3f$' % (a6))
+plt.text(2, 14, r'$\lambda = %.3f$' % (l6))
+plt.axis([0,25,-5,20])
 plt.title("Bayesian Regression - 6 degrees")
 plt.xlabel('Target Velocity (degree/s)')
 plt.ylabel('Eye Velocity (degree/s)')
@@ -225,13 +225,13 @@ plt.show()
 
 fig3 = plt.figure()
 plt.scatter(Xd10, Yd10, c='g', label='data')
-line_1, = plt.plot(T, y10_, 'k', label='1 degree')
-plt.text(10, 18, r'$p(V_e|V_t,\omega,\alpha) = \mathcal{N}(V_e|V_t\omega,\alpha)$')
-plt.text(10, 17, r'$p(\omega|\lambda) = \mathcal{N}(\omega|0,\lambda^{-1})$')
-plt.text(10, 16, r'$\omega = %.3f$' % (c10))
-plt.text(10, 15, r'$\alpha = %.3f$' % (a10))
-plt.text(10, 14, r'$\lambda = %.3f$' % (l10))
-plt.axis([9,21,-5,20])
+line_1, = plt.plot(T, y10_, 'g', label='1 degree')
+plt.text(2, 18, r'$p(V_e|V_t,\omega,\alpha) = \mathcal{N}(V_e|V_t\omega,\alpha)$')
+plt.text(2, 17, r'$p(\omega|\lambda) = \mathcal{N}(\omega|0,\lambda^{-1})$')
+plt.text(2, 16, r'$\omega = %.3f$' % (c10))
+plt.text(2, 15, r'$\alpha = %.3f$' % (a10))
+plt.text(2, 14, r'$\lambda = %.3f$' % (l10))
+plt.axis([0,25,-5,20])
 plt.title("Bayesian Regression - d = 10 degrees")
 plt.xlabel('Target Velocity (degree/s)')
 plt.ylabel('Eye Velocity (degree/s)')
@@ -239,13 +239,13 @@ plt.show()
 
 fig4 = plt.figure()
 plt.scatter(Xd20, Yd20, c='r', label='data')
-line_1, = plt.plot(T, y20_, 'k', label='1 degree')
-plt.text(10, 18, r'$p(V_e|V_t,\omega,\alpha) = \mathcal{N}(V_e|V_t\omega,\alpha)$')
-plt.text(10, 17, r'$p(\omega|\lambda) = \mathcal{N}(\omega|0,\lambda^{-1})$')
-plt.text(10, 16, r'$\omega = %.3f$' % (c20))
-plt.text(10, 15, r'$\alpha = %.3f$' % (a20))
-plt.text(10, 14, r'$\lambda = %.3f$' % (l20))
-plt.axis([9,21,-5,20])
+line_1, = plt.plot(T, y20_, 'r', label='1 degree')
+plt.text(2, 18, r'$p(V_e|V_t,\omega,\alpha) = \mathcal{N}(V_e|V_t\omega,\alpha)$')
+plt.text(2, 17, r'$p(\omega|\lambda) = \mathcal{N}(\omega|0,\lambda^{-1})$')
+plt.text(2, 16, r'$\omega = %.3f$' % (c20))
+plt.text(2, 15, r'$\alpha = %.3f$' % (a20))
+plt.text(2, 14, r'$\lambda = %.3f$' % (l20))
+plt.axis([0,25,-5,20])
 plt.title("Bayesian Regression - d = 20 degrees")
 plt.xlabel('Target Velocity (degree/s)')
 plt.ylabel('Eye Velocity (degree/s)')
@@ -253,13 +253,13 @@ plt.show()
 
 ###############################################################################
 # Bayesian Regression x-validation
-
+NumSamples = 149;
 clf = linear_model.BayesianRidge(compute_score=True)
-kf = KFold(235, n_folds=235)
-c = np.empty([235,1])
-a = np.empty([235,1])
-l = np.empty([235,1])
-Error = np.empty([235,1])
+kf = KFold(NumSamples, n_folds=NumSamples)
+c = np.empty([NumSamples,1])
+a = np.empty([NumSamples,1])
+l = np.empty([NumSamples,1])
+Error = np.empty([NumSamples,1])
 i = 0
 #for train, test in kf:
 #    
@@ -291,15 +291,19 @@ for train, test in kf:
     i += 1
     
 Error6 = np.sqrt(np.mean(Error))
-c6 = np.sqrt(np.mean(c))
-a6 = np.sqrt(np.mean(a))
-l6 = np.sqrt(np.mean(l))
+c6 = np.sqrt(np.nanmean(c))
+a6 = np.sqrt(np.median(a))
+l6 = np.sqrt(np.median(l))
+Error6s = np.sqrt(np.std(Error))
+c6s = np.sqrt(np.std(c))
+a6s = np.sqrt(np.std(a))
+l6s = np.sqrt(np.std(l))
 
-kf = KFold(235, n_folds=235)
-c = np.empty([235,1])
-a = np.empty([235,1])
-l = np.empty([235,1])
-Error = np.empty([235,1])
+kf = KFold(NumSamples, n_folds=NumSamples)
+c = np.empty([NumSamples,1])
+a = np.empty([NumSamples,1])
+l = np.empty([NumSamples,1])
+Error = np.empty([NumSamples,1])
 i = 0
 for train, test in kf:
     
@@ -313,16 +317,20 @@ for train, test in kf:
     i += 1
     
 Error10 = np.sqrt(np.mean(Error))
-c10 = np.sqrt(np.mean(c))
-a10 = np.sqrt(np.mean(a))
-l10 = np.sqrt(np.mean(l))
+#Error10 = Error
+c10 = np.sqrt(np.nanmean(c))
+a10 = np.sqrt(np.median(a))
+l10 = np.sqrt(np.median(l))
+Error10s = np.sqrt(np.std(Error))
+c10s = np.sqrt(np.std(c))
+a10s = np.sqrt(np.std(a))
+l10s = np.sqrt(np.std(l))
 
-
-kf = KFold(235, n_folds=235)
-c = np.empty([235,1])
-a = np.empty([235,1])
-l = np.empty([235,1])
-Error = np.empty([235,1])
+kf = KFold(NumSamples, n_folds=NumSamples)
+c = np.empty([NumSamples,1])
+a = np.empty([NumSamples,1])
+l = np.empty([NumSamples,1])
+Error = np.empty([NumSamples,1])
 i = 0
 for train, test in kf:
     
@@ -336,9 +344,13 @@ for train, test in kf:
     i += 1
     
 Error20 = np.sqrt(np.mean(Error))
-c20 = np.sqrt(np.mean(c))
-a20 = np.sqrt(np.mean(a))
-l20 = np.sqrt(np.mean(l))
+c20 = np.sqrt(np.nanmean(c))
+a20 = np.sqrt(np.median(a))
+l20 = np.sqrt(np.median(l))
+Error20s = np.sqrt(np.std(Error))
+c20s = np.sqrt(np.std(c))
+a20s = np.sqrt(np.std(a))
+l20s = np.sqrt(np.std(l))
 
 fig = plt.figure()
 plt.plot([6,10,20], [Error6,Error10,Error20], '-k', [6,10,20], [Error6,Error10,Error20], 'ob')
@@ -362,3 +374,65 @@ plt.plot([6,10,20], [l6,l10,l20], '-k', [6,10,20], [l6,l10,l20], 'ob')
 plt.xlabel('Dots Diameter');plt.ylabel('lambda');plt.title('Bayesian Regression')
 plt.grid(True)
 plt.show()
+
+###############################################################################
+# Multi-subject figures
+#Error6_sb = Error6
+#Error10_sb = Error10
+#Error20_sb = Error20
+#c6_sb = c6
+#c10_sb = c10
+#c20_sb = c20
+#a6_sb = a6
+#a10_sb = a10
+#a20_sb = a20
+#
+#Error6_az = Error6
+#Error10_az = Error10
+#Error20_az = Error20
+#c6_az = c6
+#c10_az = c10
+#c20_az = c20
+#a6_az = a6
+#a10_az = a10
+#a20_az = a20
+#
+#Error6_gc = Error6
+#Error10_gc = Error10
+#Error20_gc = Error20
+#c6_gc = c6
+#c10_gc = c10
+#c20_gc = c20
+#a6_gc = a6
+#a10_gc = a10
+#a20_gc = a20
+#
+#fig = plt.figure()
+#plt.plot([2,6,20], [Error6_sb,Error10_sb,Error20_sb], '-k', [6,10,20], [Error6_sb,Error10_sb,Error20_sb], 'ob',
+#        [2,6,20], [Error6_az,Error10_az,Error20_az], '-k', [6,10,20], [Error6_az,Error10_az,Error20_az], 'ob',
+#        [2,6,20], [Error6_gc,Error10_gc,Error20_gc], '-k', [6,10,20], [Error6_gc,Error10_gc,Error20_gc], 'ob'
+#        )
+#plt.xlabel('Dots Diameter');plt.ylabel('X-validation MSE');plt.title('Bayesian Regression')
+#plt.show()
+#
+#fig2 = plt.figure()
+#plt.plot([6,10,20], [c6_sb,c10_sb,c20_sb], '-k', [6,10,20], [c6_sb,c10_sb,c20_sb], 'ob',
+#        [6,10,20], [c6_az,c10_az,c20_az], '-k', [6,10,20], [c6_az,c10_az,c20_az], 'ob',
+#        [6,10,20], [c6_gc,c10_gc,c20_gc], '-k', [6,10,20], [c6_gc,c10_gc,c20_gc], 'ob'
+#        )
+#plt.xlabel('Dots Diameter');plt.ylabel('coefficient');plt.title('Bayesian Regression')
+#plt.grid(True)
+#plt.show()
+#
+#fig3 = plt.figure()
+#plt.plot([6,10,20], [a6_sb,a10_sb,a20_sb], '-k', [6,10,20], [a6_sb,a10_sb,a20_sb], 'ob',
+#        [6,10,20], [a6_az,a10_az,a20_az], '-k', [6,10,20], [a6_az,a10_az,a20_az], 'ob',
+#        [6,10,20], [a6_gc,a10_gc,a20_gc], '-k', [6,10,20], [a6_gc,a10_gc,a20_gc], 'ob'
+#        )
+#plt.xlabel('Dots Diameter');plt.ylabel('alpha');plt.title('Bayesian Regression')
+#plt.grid(True)
+#plt.show()
+#
+#
+#
+#

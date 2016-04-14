@@ -1,11 +1,10 @@
-function [mtpopulation, R, COV] = MTpopulation(Target,NumTrials,nps,npd,rmax)
+function [mtpopulation, R, COV] = MTpopulation(Target,nps,npd,rmax)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Population Parameters
 global Nps Npd MinSpeed MaxSpeed MinDirection MaxDirection NumNeurons;
 Nps = nps;
 Npd = npd;
-% Npr = npr;
 MinSpeed = 0.5;
 MaxSpeed = 256;
 MinDirection = 0;
@@ -20,12 +19,15 @@ data = load('paramDist.mat');
 cd(CurrentFolder);
 paramDist = data.paramDist;
 
-% PSs = log2(MinSpeed):(log2(MaxSpeed) - log2(MinSpeed))/Nps:(log2(MaxSpeed) - (log2(MaxSpeed) - log2(MinSpeed))/Nps);
-PSs = rand(1,Nps)*(log2(MaxSpeed) - log2(MinSpeed)) + log2(MinSpeed);
-PDs = rand(1,Npd)*(MaxDirection - MinDirection) + MinDirection;
-% PDs = MinDirection:(MaxDirection - MinDirection)/Npd:(MaxDirection - (MaxDirection - MinDirection)/Npd);
-% PSs = repmat(PSs,1,rep);
-% PDs = repmat(PDs,1,rep);
+% randomly choosing the preferred speed and direction
+% PSs = rand(1,Nps)*(log2(MaxSpeed) - log2(MinSpeed)) + log2(MinSpeed);
+% PDs = rand(1,Npd)*(MaxDirection - MinDirection) + MinDirection;
+
+% parcellating the range of speeds and directions for preferred speed and
+% direction
+PSs = log2(MinSpeed):(log2(MaxSpeed) - log2(MinSpeed))/Nps:(log2(MaxSpeed) - (log2(MaxSpeed) - log2(MinSpeed))/Nps);
+PDs = MinDirection:(MaxDirection - MinDirection)/Npd:(MaxDirection - (MaxDirection - MinDirection)/Npd);
+
 [PSmesh, PDmesh] = meshgrid(PSs,PDs);
 NumNeurons = size(PSs,2)*size(PDs,2);
 tic;
@@ -47,6 +49,8 @@ for neuroncount = 1:NumNeurons
     S.RTW     =       SampledMTneuron(4);       % Width of Size Tuning Curve for preferred direction
     S.nRTW    =       SampledMTneuron(9);       % Width of Size Tuning Curve for null direction
     S.SI      =       SampledMTneuron(11);      % Suppression Index
+    
+    % The following lines should be uncommented for no surround suppression
 %     S.PR      =       [];       % Preferred Size for preferred direction
 %     S.nPR     =       [];       % Preferred Size for null direction
 %     S.RTW     =       [];       % Width of Size Tuning Curve for preferred direction
@@ -77,27 +81,34 @@ end
 function COV = ConstructCovariance(mtpopulation,rmax)
 
 global Nps Npd MinSpeed MaxSpeed NumNeurons;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% correlations parameters
-% rmax    =      0.3;
-% td      =      .3;
-% ts      =      .3;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 fprintf(['Calculating Covariance Matrix ... '])
 PD = cellfun(@(x)(x.PreferredDirection),mtpopulation)';
 PS = cellfun(@(x)(x.PreferredSpeed),mtpopulation)';
-SI = cellfun(@(x)(x.SuppressionIndex),mtpopulation)';
 rOnDiag = cellfun(@(x)(x.Variance),mtpopulation).^0.5;
 
+% uncomment this for considering surround suppression
+SI = cellfun(@(x)(x.SuppressionIndex),mtpopulation)';
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% forming td and ts dependent on SI
+% correlations parameters
+% rmax    =      0.3;
+% if no surround suppression
+% td      =      .45; 
+% ts      =      .45;
+
+% SI-dependent correlation matrix (proportional with SIs)
 % td = nan(392,392);td(SI<0.5,SI<0.5) = 0.1;td(SI>0.5,SI>0.5) = 2;td(SI>0.5,SI<0.5) = 0.5;td(SI<0.5,SI>0.5) = 0.5;
 % ts = nan(392,392);ts(SI<0.5,SI<0.5) = 0.1;ts(SI>0.5,SI>0.5) = 2;ts(SI>0.5,SI<0.5) = 0.5;ts(SI<0.5,SI>0.5) = 0.5;
 [SI1, SI2] = meshgrid(SI,SI);
-td = 1*(SI1.*SI2 + 0.1);
-ts = 1*(SI1.*SI2 + 0.2);
-% td = 1*(0.2*ones(size(SI1)).*ones(size(SI2)) + 0.1);
-% ts = 1*(0.2*ones(size(SI1)).*ones(size(SI2)) + 0.1);
+
+% SI-dependent correlation matrix (proportional with SIs)
+td = 1*(SI1.*SI2 + .05); 
+ts = 1*(SI1.*SI2 + .05);
+
+% SI-independent correlation matrix
+% td = 1*(.4*ones(size(SI1)).*ones(size(SI2)) + .05);
+% ts = 1*(.4*ones(size(SI1)).*ones(size(SI2)) + .05);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
