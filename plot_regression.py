@@ -253,7 +253,7 @@ plt.show()
 
 ###############################################################################
 # Bayesian Regression x-validation
-NumSamples = 149;
+NumSamples = 206;
 clf = linear_model.BayesianRidge(compute_score=True)
 kf = KFold(NumSamples, n_folds=NumSamples)
 c = np.empty([NumSamples,1])
@@ -291,13 +291,13 @@ for train, test in kf:
     i += 1
     
 Error6 = np.sqrt(np.mean(Error))
-c6 = np.sqrt(np.nanmean(c))
-a6 = np.sqrt(np.median(a))
-l6 = np.sqrt(np.median(l))
+c6 = (np.nanmean(c))
+a6 = (np.median(a))
+l6 = (np.median(l))
 Error6s = np.sqrt(np.std(Error))
-c6s = np.sqrt(np.std(c))
-a6s = np.sqrt(np.std(a))
-l6s = np.sqrt(np.std(l))
+c6s = (np.std(c))
+a6s = (np.std(a))
+l6s = (np.std(l))
 
 kf = KFold(NumSamples, n_folds=NumSamples)
 c = np.empty([NumSamples,1])
@@ -318,13 +318,13 @@ for train, test in kf:
     
 Error10 = np.sqrt(np.mean(Error))
 #Error10 = Error
-c10 = np.sqrt(np.nanmean(c))
-a10 = np.sqrt(np.median(a))
-l10 = np.sqrt(np.median(l))
+c10 = (np.nanmean(c))
+a10 = (np.median(a))
+l10 = (np.median(l))
 Error10s = np.sqrt(np.std(Error))
-c10s = np.sqrt(np.std(c))
-a10s = np.sqrt(np.std(a))
-l10s = np.sqrt(np.std(l))
+c10s = (np.std(c))
+a10s = (np.std(a))
+l10s = (np.std(l))
 
 kf = KFold(NumSamples, n_folds=NumSamples)
 c = np.empty([NumSamples,1])
@@ -344,13 +344,13 @@ for train, test in kf:
     i += 1
     
 Error20 = np.sqrt(np.mean(Error))
-c20 = np.sqrt(np.nanmean(c))
-a20 = np.sqrt(np.median(a))
-l20 = np.sqrt(np.median(l))
+c20 = (np.nanmean(c))
+a20 = (np.median(a))
+l20 = (np.median(l))
 Error20s = np.sqrt(np.std(Error))
-c20s = np.sqrt(np.std(c))
-a20s = np.sqrt(np.std(a))
-l20s = np.sqrt(np.std(l))
+c20s = (np.std(c))
+a20s = (np.std(a))
+l20s = (np.std(l))
 
 fig = plt.figure()
 plt.plot([6,10,20], [Error6,Error10,Error20], '-k', [6,10,20], [Error6,Error10,Error20], 'ob')
