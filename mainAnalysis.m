@@ -1,8 +1,28 @@
 %% Load the Subjects data
+display('Choose the Raw Eye mat file:');uiopen;
+display('Choose the Saccade mat file:');uiopen;
+listOFvariables = who;
+X = [];
+S = [];
+TV = [];
+for i = 1:length(listOFvariables)
+    switch listOFvariables{i}(1)
+        case 'X'
+            Command = ['X = cat(2,X,',listOFvariables{i},'(:,:,1:1804));'];
+            eval(Command);
+        case 'S'
+            Command = ['S = cat(2,S,',listOFvariables{i},');'];
+            eval(Command);
+        case 'T'
+            Command = ['TV = cat(2,TV,',listOFvariables{i},');'];
+            eval(Command);
+    end
+end
+
 % Victoire data
 % Uthreshold_L = ?; Lthreshold_L = ?;
-% load('/Users/shahab/MNI/Analysis/Normal-Subject-Behavior/RawEye/VictoireData.mat')
-% load('/Users/shahab/MNI/Analysis/Normal-Subject-Behavior/Saccades/VictoireSaccades.mat')
+% load('D:\Analysis\Behavioral-Normal-Subject\Raw Eye/VictoireData.mat')
+% load('D:\Analysis\Behavioral-Normal-Subject\Saccades/VictoireSaccades.mat')
 % X = cat(2, ...
 %     X16042704(:,:,1:1805), ...
 %     X16042705(:,:,1:1805), ...
@@ -36,8 +56,8 @@
 % 
 % Travis data
 % Uthreshold_L = ?; Lthreshold_L = ?;
-% load('/Users/shahab/MNI/Analysis/Normal-Subject-Behavior/RawEye/TravisData.mat');
-% load('/Users/shahab/MNI/Analysis/Normal-Subject-Behavior/Saccades/TravisSaccades.mat')
+% load('D:\Analysis\Behavioral-Normal-Subject\Raw Eye/TravisData.mat');
+% load('D:\Analysis\Behavioral-Normal-Subject\Saccades/TravisSaccades.mat')
 % X = cat(2, ...
 %     X16042602(:,:,1:1805), ...
 %     X16050501(:,:,1:1805), ...
@@ -195,8 +215,8 @@
 % 
 % Arnaud data
 % Uthreshold_L = 0; Lthreshold_L = -25;
-% load('/Users/shahab/MNI/Analysis/Normal-Subject-Behavior/RawEye/ArnaudData.mat');
-% load('/Users/shahab/MNI/Analysis/Normal-Subject-Behavior/Saccades/ArnaudSaccades.mat');
+% load('D:\Analysis\Behavioral-Normal-Subject\Raw Eye/ArnaudData.mat');
+% load('D:\Analysis\Behavioral-Normal-Subject\Saccades/ArnaudSaccades.mat');
 % X = cat(2, ...
 %     X16031003(:,:,1:1806), ...
 %     X16031404(:,:,1:1806), ...
@@ -289,35 +309,35 @@
 % X(:,31:60,:) = X1302(:,:,1:1806);
 
 % Shahab data
-load('/Users/shahab/MNI/Analysis/Normal-Subject-Behavior/RawEye/ShahabData.mat');
-X = cat(2 ...
-    ,X1801(:,:,1:1805) ...
-    ,X1802(:,:,1:1805) ...
-    ,X1803(:,:,1:1805) ...
-    ,X1804(:,:,1:1805) ...
-    ,X1805(:,:,1:1805) ...
-    ,X2001(:,:,1:1805) ...
-    ,X2002(:,:,1:1805) ...
-    );
-S = cat(2 ...
-    ,S1801 ...
-    ,S1802 ...
-    ,S1803 ...
-    ,S1804 ...
-    ,S1805 ...
-    ,S2001 ...
-    ,S2002 ...
-    );
-TV = cat(2 ...
-    ,TV1801 ...
-    ,TV1802 ...
-    ,TV1803 ...
-    ,TV1804 ...
-    ,TV1805 ...
-    ,TV2001 ...
-    ,TV2002 ...
-    );
-
+% load('/Users/shahab/MNI/Analysis/Normal-Subject-Behavior/RawEye/ShahabData.mat');
+% X = cat(2 ...
+%     ,X1801(:,:,1:1805) ...
+%     ,X1802(:,:,1:1805) ...
+%     ,X1803(:,:,1:1805) ...
+%     ,X1804(:,:,1:1805) ...
+%     ,X1805(:,:,1:1805) ...
+%     ,X2001(:,:,1:1805) ...
+%     ,X2002(:,:,1:1805) ...
+%     );
+% S = cat(2 ...
+%     ,S1801 ...
+%     ,S1802 ...
+%     ,S1803 ...
+%     ,S1804 ...
+%     ,S1805 ...
+%     ,S2001 ...
+%     ,S2002 ...
+%     );
+% TV = cat(2 ...
+%     ,TV1801 ...
+%     ,TV1802 ...
+%     ,TV1803 ...
+%     ,TV1804 ...
+%     ,TV1805 ...
+%     ,TV2001 ...
+%     ,TV2002 ...
+%     );
+% 
 % my old data
 % X = X1901(:,:,1:1805);
 % X(:,31:60,:) = X1902(:,:,1:1805);
@@ -429,20 +449,20 @@ end
 
 %% plot 
                         
-
-figure;
-plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;
-plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);
-plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);
-title('Rightward Pursuit')
-
-
-figure;
-plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);hold on;
-plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);
-plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);
-title('Leftward Pursuit')
-
+% 
+% figure;
+% plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;
+% plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);
+% plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);
+% title('Rightward Pursuit')
+% 
+% 
+% figure;
+% plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);hold on;
+% plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);
+% plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);
+% title('Leftward Pursuit')
+% 
 
 %% Throwing out outliers
 % Leftward
@@ -464,18 +484,18 @@ V_posS(V_posS < LThresholdMatrix) = nan;
 
 
 % post threshold plot
-figure;
-plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;
-plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);
-plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);
-title('Rightward Pursuit')
-
-
-figure;
-plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);hold on;
-plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);
-plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);
-title('Leftward Pursuit')
+% figure;
+% plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;
+% plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);
+% plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);
+% title('Rightward Pursuit')
+% 
+% 
+% figure;
+% plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);hold on;
+% plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);
+% plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);
+% title('Leftward Pursuit')
 
 
 %% prediction
@@ -528,25 +548,25 @@ csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
 
 %%
 % Leftward
-V_posS_L = V_posS(2:2:6,:)';
-V_posS_L = reshape(V_posS_L,size(V_posS_L,1)*size(V_posS_L,2),1);
-TV_L = TV(2:2:6,:)';
-TV_L = reshape(TV_L,size(V_posS_L,1)*size(V_posS_L,2),1);
-Cond = cell(size(V_posS_L,1)*size(V_posS_L,2),1);
-for i = 1:length(Cond)
-    if i <=size(V_posS_L,1)*size(V_posS_L,2)/3
-        Cond{i} = '2 degrees';
-    elseif i>size(V_posS_L,1)*size(V_posS_L,2)/3 && i<=size(V_posS_L,1)*size(V_posS_L,2)*2/3
-        Cond{i} = '6 degrees';
-    else
-        Cond{i} = '20 degrees';
-    end
-end
+% V_posS_L = V_posS(2:2:6,:)';
+% V_posS_L = reshape(V_posS_L,size(V_posS_L,1)*size(V_posS_L,2),1);
+% TV_L = TV(2:2:6,:)';
+% TV_L = reshape(TV_L,size(V_posS_L,1)*size(V_posS_L,2),1);
+% Cond = cell(size(V_posS_L,1)*size(V_posS_L,2),1);
+% for i = 1:length(Cond)
+%     if i <=size(V_posS_L,1)*size(V_posS_L,2)/3
+%         Cond{i} = '2 degrees';
+%     elseif i>size(V_posS_L,1)*size(V_posS_L,2)/3 && i<=size(V_posS_L,1)*size(V_posS_L,2)*2/3
+%         Cond{i} = '6 degrees';
+%     else
+%         Cond{i} = '20 degrees';
+%     end
+% end
 
 % scatterhist(TV_L,-V_posS_L,'Group',Cond,'Location','SouthEast',...
 % 'Direction','out','Color','gbr','LineStyle',{'-'},...
 % 'LineWidth',[2,2,2],'Marker','do*','MarkerSize',[6,6,6],'Kernel','on');
-scatterhist(TV_L,-V_posS_L,'Group',Cond,'LineStyle',{'-'},'Marker','.','MarkerSize',20);
+% scatterhist(TV_L,-V_posS_L,'Group',Cond,'LineStyle',{'-'},'Marker','.','MarkerSize',20);
 
 % Rightward
 % V_posS_L = V_posS(1:2:5,:)';
@@ -567,182 +587,378 @@ scatterhist(TV_L,-V_posS_L,'Group',Cond,'LineStyle',{'-'},'Marker','.','MarkerSi
 % scatterhist(TV_L,V_posS_L,'Group',Cond,'LineStyle',{'-'});
 
 %% Saccades analysis
-Samp = squeeze(S(:,:,1));
-Samp_n = (Samp-min(min(Samp)))./(max(max(Samp))-min(min(Samp)));
-% Samp_n = Samp;
-TV_n = (TV-min(min(TV)))./(max(max(TV))-min(min(TV))); 
-% TV_n = TV;
-
-SampL_n = Samp_n(:,:)';
-SampL_n = reshape(SampL_n,size(SampL_n,1)*size(SampL_n,2),1);
-TV_L = TV_n(:,:)';
-TV_L = reshape(TV_L,size(SampL_n,1)*size(SampL_n,2),1);
-Cond = cell(size(SampL_n,1)*size(SampL_n,2),1);
-for i = 1:length(Cond)
-    if i <=size(SampL_n,1)*size(SampL_n,2)/3
-        Cond{i} = '2 degrees';
-    elseif i>size(SampL_n,1)*size(SampL_n,2)/3 && i<=size(SampL_n,1)*size(SampL_n,2)*2/3
-        Cond{i} = '6 degrees';
-    else
-        Cond{i} = '20 degrees';
-    end
-end
-scatterhist(TV_L,SampL_n,'Group',Cond,'LineStyle',{'-'},'Marker','.','MarkerSize',20);
-
-
-figure;scatter(TV(1,:),squeeze(S(1,:,2)),'or');
-hold on;
-scatter(TV(3,:),squeeze(S(3,:,2)),'*k');
-scatter(TV(5,:),squeeze(S(5,:,2)),'xb');
-scatter(TV(2,:),squeeze(S(2,:,2)),'or');
-scatter(TV(4,:),squeeze(S(4,:,2)),'*k');
-scatter(TV(6,:),squeeze(S(6,:,2)),'xb');
-xlabel('target V');ylabel('saccade delay')
-
-figure;scatter(squeeze(S(1,:,1)),squeeze(S(1,:,2)),'or');
-hold on;
-scatter(squeeze(S(3,:,1)),squeeze(S(3,:,2)),'*k');
-scatter(squeeze(S(5,:,1)),squeeze(S(5,:,2)),'xb');
-scatter(squeeze(S(2,:,1)),squeeze(S(2,:,2)),'or');
-scatter(squeeze(S(4,:,1)),squeeze(S(4,:,2)),'*k');
-scatter(squeeze(S(6,:,1)),squeeze(S(6,:,2)),'xb');
-xlabel('saccade amp');ylabel('saccade delay')
-
-figure;scatter(TV(1,:),squeeze(S(1,:,1))*1000./(squeeze(S(1,:,3))-squeeze(S(1,:,2))),'or');
-hold on;
-scatter(TV(3,:),squeeze(S(3,:,1))*1000./(squeeze(S(3,:,3))-squeeze(S(3,:,2))),'*k');
-scatter(TV(5,:),squeeze(S(5,:,1))*1000./(squeeze(S(5,:,3))-squeeze(S(5,:,2))),'xb');
-scatter(TV(2,:),squeeze(S(5,:,1))*1000./(squeeze(S(2,:,3))-squeeze(S(2,:,2))),'or');
-scatter(TV(4,:),squeeze(S(5,:,1))*1000./(squeeze(S(4,:,3))-squeeze(S(4,:,2))),'*k');
-scatter(TV(6,:),squeeze(S(5,:,1))*1000./(squeeze(S(6,:,3))-squeeze(S(6,:,2))),'xb');
-
-figure;scatter(V_posS(1,:),squeeze(S(1,:,1)),'or');
-hold on;
-scatter(V_posS(3,:),squeeze(S(3,:,1)),'*k');
-scatter(V_posS(5,:),squeeze(S(5,:,1)),'xb');
-scatter(-V_posS(2,:),squeeze(S(2,:,1)),'or');
-scatter(-V_posS(4,:),squeeze(S(4,:,1)),'*k');
-scatter(-V_posS(6,:),squeeze(S(6,:,1)),'xb');
-xlabel('target V');ylabel('saccade amp')
-
-SVC = (squeeze(S(:,:,1))-10)*1000./(squeeze(S(:,:,3))-1000);
-SVC_L = SVC(:,:)';
-SVC_L = reshape(SVC_L,size(SVC_L,1)*size(SVC_L,2),1);
-TV_L = TV(:,:)';
-TV_L = reshape(TV_L,size(SVC_L,1)*size(SVC_L,2),1);
-Cond = cell(size(SVC_L,1)*size(SVC_L,2),1);
-for i = 1:length(Cond)
-    if i <=size(SVC_L,1)*size(SVC_L,2)/3
-        Cond{i} = '2 degrees';
-    elseif i>size(SVC_L,1)*size(SVC_L,2)/3 && i<=size(SVC_L,1)*size(SVC_L,2)*2/3
-        Cond{i} = '6 degrees';
-    else
-        Cond{i} = '20 degrees';
-    end
-end
-scatterhist(TV_L,SVC_L,'Group',Cond,'LineStyle',{'-'},'Marker','.','MarkerSize',20,'LineWidth',2);
-figure;scatter(TV(1,:),SVC(1,:),'or');hold on
-scatter(TV(3,:),SVC(3,:),'*k');
-scatter(TV(5,:),SVC(5,:),'xb');
-
-Ydata6 = [SVC(1,:),SVC(2,:)]';
-Xdata6 = [TV(1,:),TV(2,:)]';
-Xdata6(isnan(Ydata6)) = [];
-Ydata6(isnan(Ydata6)) = [];
-
-Ydata10 = [SVC(3,:),SVC(4,:)]';
-Xdata10 = [TV(3,:),TV(4,:)]';
-Xdata10(isnan(Ydata10)) = [];
-Ydata10(isnan(Ydata10)) = [];
-
-Ydata20 = [SVC(5,:),SVC(6,:)]';
-Xdata20 = [TV(5,:),TV(6,:)]';
-Xdata20(isnan(Ydata20)) = [];
-Ydata20(isnan(Ydata20)) = [];
-
-[c6,p6,rlo6,rup6] = corrcoef(Ydata6,Xdata6);c6 = c6(2);p6 = p6(2);rlo6 = rlo6(2);rup6 = rup6(2);
-[c10,p10,rlo10,rup10] = corrcoef(Ydata10,Xdata10);c10 = c10(2);p10 = p10(2);rlo10 = rlo10(2);rup10 = rup10(2);
-[c20,p20,rlo20,rup20] = corrcoef(Ydata20,Xdata20);c20 = c20(2);p20 = p20(2);rlo20 = rlo20(2);rup20 = rup20(2);
-figure;plot([2,6,20],[c6,c10,c20],'-o');hold on;plot([2,6,20],[rlo6,rlo10,rlo20],'--k');plot([2,6,20],[rup6,rup10,rup20],'--k');
-figure;plot([2,6,20],[p6,p10,p20],'-o');
+% Samp = squeeze(S(:,:,1));
+% Samp_n = (Samp-min(min(Samp)))./(max(max(Samp))-min(min(Samp)));
+% % Samp_n = Samp;
+% TV_n = (TV-min(min(TV)))./(max(max(TV))-min(min(TV))); 
+% % TV_n = TV;
+% 
+% SampL_n = Samp_n(:,:)';
+% SampL_n = reshape(SampL_n,size(SampL_n,1)*size(SampL_n,2),1);
+% TV_L = TV_n(:,:)';
+% TV_L = reshape(TV_L,size(SampL_n,1)*size(SampL_n,2),1);
+% Cond = cell(size(SampL_n,1)*size(SampL_n,2),1);
+% for i = 1:length(Cond)
+%     if i <=size(SampL_n,1)*size(SampL_n,2)/3
+%         Cond{i} = '2 degrees';
+%     elseif i>size(SampL_n,1)*size(SampL_n,2)/3 && i<=size(SampL_n,1)*size(SampL_n,2)*2/3
+%         Cond{i} = '6 degrees';
+%     else
+%         Cond{i} = '20 degrees';
+%     end
+% end
+% scatterhist(TV_L,SampL_n,'Group',Cond,'LineStyle',{'-'},'Marker','.','MarkerSize',20);
+% 
+% 
+% figure;scatter(TV(1,:),squeeze(S(1,:,2)),'or');
+% hold on;
+% scatter(TV(3,:),squeeze(S(3,:,2)),'*k');
+% scatter(TV(5,:),squeeze(S(5,:,2)),'xb');
+% scatter(TV(2,:),squeeze(S(2,:,2)),'or');
+% scatter(TV(4,:),squeeze(S(4,:,2)),'*k');
+% scatter(TV(6,:),squeeze(S(6,:,2)),'xb');
+% xlabel('target V');ylabel('saccade delay')
+% 
+% figure;scatter(squeeze(S(1,:,1)),squeeze(S(1,:,2)),'or');
+% hold on;
+% scatter(squeeze(S(3,:,1)),squeeze(S(3,:,2)),'*k');
+% scatter(squeeze(S(5,:,1)),squeeze(S(5,:,2)),'xb');
+% scatter(squeeze(S(2,:,1)),squeeze(S(2,:,2)),'or');
+% scatter(squeeze(S(4,:,1)),squeeze(S(4,:,2)),'*k');
+% scatter(squeeze(S(6,:,1)),squeeze(S(6,:,2)),'xb');
+% xlabel('saccade amp');ylabel('saccade delay')
+% 
+% figure;scatter(TV(1,:),squeeze(S(1,:,1))*1000./(squeeze(S(1,:,3))-squeeze(S(1,:,2))),'or');
+% hold on;
+% scatter(TV(3,:),squeeze(S(3,:,1))*1000./(squeeze(S(3,:,3))-squeeze(S(3,:,2))),'*k');
+% scatter(TV(5,:),squeeze(S(5,:,1))*1000./(squeeze(S(5,:,3))-squeeze(S(5,:,2))),'xb');
+% scatter(TV(2,:),squeeze(S(5,:,1))*1000./(squeeze(S(2,:,3))-squeeze(S(2,:,2))),'or');
+% scatter(TV(4,:),squeeze(S(5,:,1))*1000./(squeeze(S(4,:,3))-squeeze(S(4,:,2))),'*k');
+% scatter(TV(6,:),squeeze(S(5,:,1))*1000./(squeeze(S(6,:,3))-squeeze(S(6,:,2))),'xb');
+% 
+% figure;scatter(V_posS(1,:),squeeze(S(1,:,1)),'or');
+% hold on;
+% scatter(V_posS(3,:),squeeze(S(3,:,1)),'*k');
+% scatter(V_posS(5,:),squeeze(S(5,:,1)),'xb');
+% scatter(-V_posS(2,:),squeeze(S(2,:,1)),'or');
+% scatter(-V_posS(4,:),squeeze(S(4,:,1)),'*k');
+% scatter(-V_posS(6,:),squeeze(S(6,:,1)),'xb');
+% xlabel('target V');ylabel('saccade amp')
+% 
+% SVC = (squeeze(S(:,:,1))-10)*1000./(squeeze(S(:,:,3))-1000);
+% SVC_L = SVC(:,:)';
+% SVC_L = reshape(SVC_L,size(SVC_L,1)*size(SVC_L,2),1);
+% TV_L = TV(:,:)';
+% TV_L = reshape(TV_L,size(SVC_L,1)*size(SVC_L,2),1);
+% Cond = cell(size(SVC_L,1)*size(SVC_L,2),1);
+% for i = 1:length(Cond)
+%     if i <=size(SVC_L,1)*size(SVC_L,2)/3
+%         Cond{i} = '2 degrees';
+%     elseif i>size(SVC_L,1)*size(SVC_L,2)/3 && i<=size(SVC_L,1)*size(SVC_L,2)*2/3
+%         Cond{i} = '6 degrees';
+%     else
+%         Cond{i} = '20 degrees';
+%     end
+% end
+% scatterhist(TV_L,SVC_L,'Group',Cond,'LineStyle',{'-'},'Marker','.','MarkerSize',20,'LineWidth',2);
+% figure;scatter(TV(1,:),SVC(1,:),'or');hold on
+% scatter(TV(3,:),SVC(3,:),'*k');
+% scatter(TV(5,:),SVC(5,:),'xb');
+% 
+% Ydata6 = [SVC(1,:),SVC(2,:)]';
+% Xdata6 = [TV(1,:),TV(2,:)]';
+% Xdata6(isnan(Ydata6)) = [];
+% Ydata6(isnan(Ydata6)) = [];
+% 
+% Ydata10 = [SVC(3,:),SVC(4,:)]';
+% Xdata10 = [TV(3,:),TV(4,:)]';
+% Xdata10(isnan(Ydata10)) = [];
+% Ydata10(isnan(Ydata10)) = [];
+% 
+% Ydata20 = [SVC(5,:),SVC(6,:)]';
+% Xdata20 = [TV(5,:),TV(6,:)]';
+% Xdata20(isnan(Ydata20)) = [];
+% Ydata20(isnan(Ydata20)) = [];
+% 
+% [c6,p6,rlo6,rup6] = corrcoef(Ydata6,Xdata6);c6 = c6(2);p6 = p6(2);rlo6 = rlo6(2);rup6 = rup6(2);
+% [c10,p10,rlo10,rup10] = corrcoef(Ydata10,Xdata10);c10 = c10(2);p10 = p10(2);rlo10 = rlo10(2);rup10 = rup10(2);
+% [c20,p20,rlo20,rup20] = corrcoef(Ydata20,Xdata20);c20 = c20(2);p20 = p20(2);rlo20 = rlo20(2);rup20 = rup20(2);
+% figure;plot([2,6,20],[c6,c10,c20],'-o');hold on;plot([2,6,20],[rlo6,rlo10,rlo20],'--k');plot([2,6,20],[rup6,rup10,rup20],'--k');
+% figure;plot([2,6,20],[p6,p10,p20],'-o');
 
 %% percentile 
+
+% SVC
+% SVC = (squeeze(S(:,:,1))-10)*1000./(squeeze(S(:,:,3))-1000);
+% prctlSVC_2 = [[prctile([TV(1,:),TV(2,:)],20), ...
+% prctile([TV(1,:),TV(2,:)],40), ...
+% prctile([TV(1,:),TV(2,:)],60), ...
+% prctile([TV(1,:),TV(2,:)],80), ...
+% prctile([TV(1,:),TV(2,:)],100)];...
+% [prctile([SVC(1,:),SVC(2,:)],20), ...
+% prctile([SVC(1,:),SVC(2,:)],40), ...
+% prctile([SVC(1,:),SVC(2,:)],60), ...
+% prctile([SVC(1,:),SVC(2,:)],80), ...
+% prctile([SVC(1,:),SVC(2,:)],100)]];
+% 
+% prctlSVC_6 = [[prctile([TV(3,:),TV(4,:)],20), ...
+% prctile([TV(3,:),TV(4,:)],40), ...
+% prctile([TV(3,:),TV(4,:)],60), ...
+% prctile([TV(3,:),TV(4,:)],80), ...
+% prctile([TV(3,:),TV(4,:)],100)];...
+% [prctile([SVC(3,:),SVC(4,:)],20), ...
+% prctile([SVC(3,:),SVC(4,:)],40), ...
+% prctile([SVC(3,:),SVC(4,:)],60), ...
+% prctile([SVC(3,:),SVC(4,:)],80), ...
+% prctile([SVC(3,:),SVC(4,:)],100)]];
+% 
+% prctlSVC_20 = [[prctile([TV(5,:),TV(6,:)],20), ...
+% prctile([TV(5,:),TV(6,:)],40), ...
+% prctile([TV(5,:),TV(6,:)],60), ...
+% prctile([TV(5,:),TV(6,:)],80), ...
+% prctile([TV(5,:),TV(6,:)],100)];...
+% [prctile([SVC(5,:),SVC(6,:)],20), ...
+% prctile([SVC(5,:),SVC(6,:)],40), ...
+% prctile([SVC(5,:),SVC(6,:)],60), ...
+% prctile([SVC(5,:),SVC(6,:)],80), ...
+% prctile([SVC(5,:),SVC(6,:)],100)]];
+
+
+% SPEM velocity
+% prctlSPEMv_2 = [[prctile([TV(2,:)],20), ...
+%     prctile([TV(2,:)],40), ...
+%     prctile([TV(2,:)],60), ...
+%     prctile([TV(2,:)],80), ...
+%     prctile([TV(2,:)],100)];...
+%     [prctile([-V_posS(2,:)],20), ...
+%     prctile([-V_posS(2,:)],40), ...
+%     prctile([-V_posS(2,:)],60), ...
+%     prctile([-V_posS(2,:)],80), ...
+%     prctile([-V_posS(2,:)],100)]];
+% 
+% prctlSPEMv_6 = [[prctile([TV(4,:)],20), ...
+%     prctile([TV(4,:)],40), ...
+%     prctile([TV(4,:)],60), ...
+%     prctile([TV(4,:)],80), ...
+%     prctile([TV(4,:)],100)];...
+%     [prctile([-V_posS(4,:)],20), ...
+%     prctile([-V_posS(4,:)],40), ...
+%     prctile([-V_posS(4,:)],60), ...
+%     prctile([-V_posS(4,:)],80), ...
+%     prctile([-V_posS(4,:)],100)]];
+% 
+% prctlSPEMv_20 = [[prctile([TV(6,:)],20), ...
+%     prctile([TV(6,:)],40), ...
+%     prctile([TV(6,:)],60), ...
+%     prctile([TV(6,:)],80), ...
+%     prctile([TV(6,:)],100)];...
+%     [prctile([-V_posS(6,:)],20), ...
+%     prctile([-V_posS(6,:)],40), ...
+%     prctile([-V_posS(6,:)],60), ...
+%     prctile([-V_posS(6,:)],80), ...
+%     prctile([-V_posS(6,:)],100)]];
+% 
+
+
+
+%% plot percentiles
+
+% subjectsList = {'ag','az','cs','gc','hr','ls','mp','sb','tc','vs'};
+% figure;
+% for i = 1:length(subjectsList)
+%     subplot(4,3,i);
+%     Command = ['plot(prctlSPEMv_',subjectsList{i},'2(1,:),prctlSPEMv_',subjectsList{i},'2(2,:),''-ob'',''LineWidth'',2);hold on;'];
+%     eval(Command);
+%     Command = ['plot(prctlSPEMv_',subjectsList{i},'6(1,:),prctlSPEMv_',subjectsList{i},'6(2,:),''-or'',''LineWidth'',2);hold on;'];
+%     eval(Command);
+%     Command = ['plot(prctlSPEMv_',subjectsList{i},'20(1,:),prctlSPEMv_',subjectsList{i},'20(2,:),''-ok'',''LineWidth'',2);hold on;'];
+%     eval(Command);
+%     title(['subject: ',subjectsList{i},]);
+%     xlabel('target velocity');ylabel('spem velocity')
+% end
+% 
+% figure;
+% for i = 1:length(subjectsList)
+%     subplot(4,3,i);
+%     Command = ['plot(prctlSVC_',subjectsList{i},'2(1,:),prctlSVC_',subjectsList{i},'2(2,:),''-ob'',''LineWidth'',2);hold on;'];
+%     eval(Command);
+%     Command = ['plot(prctlSVC_',subjectsList{i},'6(1,:),prctlSVC_',subjectsList{i},'6(2,:),''-or'',''LineWidth'',2);hold on;'];
+%     eval(Command);
+%     Command = ['plot(prctlSVC_',subjectsList{i},'20(1,:),prctlSVC_',subjectsList{i},'20(2,:),''-ok'',''LineWidth'',2);hold on;'];
+%     eval(Command);
+%     title(['subject: ',subjectsList{i},]);
+%     xlabel('target velocity');ylabel('svc')
+% end
+% 
+%% Variance calculations
+
+% thisSubject = 'gc';
+% SVC = (squeeze(S(:,:,1))-10)*1000./(squeeze(S(:,:,3))-1000);
+% load('D:\Analysis\Behavioral-Normal-Subject\percentiles_SVCandSPEMv.mat');
+% condList = [2,6,20];
+% idxList = [2 4 6];
+% for j = [1:3]
+%     thisCond = condList(j);
+%     thisIdx = idxList(j);
+% for i = 1:size(V_posS,2)
+%     eval(['maxV = prctlSPEMv_',thisSubject,num2str(thisCond),'(1,end);']);
+%     eval(['minV = prctlSPEMv_',thisSubject,num2str(thisCond),'(1,1);']);
+%     eval(['thisTV = TV(',num2str(thisIdx),',i);']);
+%     if thisTV > minV && thisTV < maxV
+%         eval(['y_spem',thisSubject,'(i,j) = pwLinearModel(TV(',num2str(thisIdx),',i),prctlSPEMv_',thisSubject,num2str(thisCond),'(1,:),prctlSPEMv_',thisSubject,num2str(thisCond),'(2,:));']);
+%         eval(['error_spem_',thisSubject,'(i,j) = abs(y_spem',thisSubject,'(i,j) - V_posS(',num2str(thisIdx),',i));']);
+%         eval(['yplus_spem_',thisSubject,'(i,j) = y_spem',thisSubject,'(i,j) + error_spem_',thisSubject,'(i,j)/2;']);
+%         eval(['yminus_spem_',thisSubject,'(i,j) = y_spem',thisSubject,'(i,j) - error_spem_',thisSubject,'(i,j)/2;']);
+%     else
+%         eval(['y_spem',thisSubject,'(i,j) = nan;']);
+%         eval(['error_spem_',thisSubject,'(i,j) = nan;']);
+%         eval(['yplus_spem_',thisSubject,'(i,j) = nan;'])
+%         eval(['yminus_spem_',thisSubject,'(i,j) = nan;'])
+%     end
+% end
+% end
+% 
+% for j = [1:3]
+%     thisCond = condList(j);
+%     thisIdx = idxList(j);
+% for i = 1:size(V_posS,2)
+%     eval(['maxV = prctlSVC_',thisSubject,num2str(thisCond),'(1,end);']);
+%     eval(['minV = prctlSVC_',thisSubject,num2str(thisCond),'(1,1);']);
+%     eval(['thisTV = TV(',num2str(thisIdx),',i);']);
+%     if thisTV > minV && thisTV < maxV
+%         eval(['y_svc',thisSubject,'(i,j) = pwLinearModel(TV(',num2str(thisIdx),',i),prctlSVC_',thisSubject,num2str(thisCond),'(1,:),prctlSVC_',thisSubject,num2str(thisCond),'(2,:));']);
+%         eval(['error_svc_',thisSubject,'(i,j) = abs(y_svc',thisSubject,'(i,j) - SVC(',num2str(thisIdx),',i));']);
+%         eval(['yplus_svc_',thisSubject,'(i,j) = y_svc',thisSubject,'(i,j) + error_svc_',thisSubject,'(i,j)/2;']);
+%         eval(['yminus_svc_',thisSubject,'(i,j) = y_svc',thisSubject,'(i,j) - error_svc_',thisSubject,'(i,j)/2;']);
+%     else
+%         eval(['y_svc',thisSubject,'(i,j) = nan;']);
+%         eval(['error_svc_',thisSubject,'(i,j) = nan;']);
+%         eval(['yplus_svc_',thisSubject,'(i,j) = nan;'])
+%         eval(['yminus_svc_',thisSubject,'(i,j) = nan;'])
+%     end
+% end
+% end
+% subjectsList = {'ag','az','cs','gc','hr','ls','mp','sb','tc','vs'};
+% figure;
+% for i = 1:10
+%     subplot(3,4,i);
+%     eval(['plot(nanmedian(error_spem_',subjectsList{i},',1));']);
+% end
+% figure;
+% for i = 1:10
+%     subplot(3,4,i);
+%     eval(['plot(nanmedian(error_svc_',subjectsList{i},',1));']);
+% end
+
+%% percentile 2
+
 SVC = (squeeze(S(:,:,1))-10)*1000./(squeeze(S(:,:,3))-1000);
+[TVsorted,sortedIdx]=sort([TV(1,:),TV(2,:)]);
+SVCtemp = [SVC(1,:),SVC(2,:)];
+SVCtemp = SVCtemp(sortedIdx);
+k = 0;
+for i = 1:length(SVCtemp)/10:length(SVCtemp)
+    k = k + 1;
+    prctlSVC_2(1,k) = nanmedian(SVCtemp(i:(i+(length(SVCtemp)/10)-1)));
+    prctlSVC_2(2,k) = nanmedian(TVsorted(i:(i+(length(SVCtemp)/10)-1)));
+%     
+%     varSVC_2(1,k) = nanvar(SVCtemp(i:(i+(length(SVCtemp)/5)-1)));
+%     varSVC_2(2,k) = nanvar(TVsorted(i:(i+(length(SVCtemp)/5)-1)));
+    
+end
 
-figure;plot([prctile([TV(1,:),TV(2,:)],20), ...
-    prctile([TV(1,:),TV(2,:)],40), ...
-    prctile([TV(1,:),TV(2,:)],60), ...
-    prctile([TV(1,:),TV(2,:)],80), ...
-    prctile([TV(1,:),TV(2,:)],100)],...
-    [prctile([SVC(1,:),SVC(2,:)],20), ...
-    prctile([SVC(1,:),SVC(2,:)],40), ...
-    prctile([SVC(1,:),SVC(2,:)],60), ...
-    prctile([SVC(1,:),SVC(2,:)],80), ...
-    prctile([SVC(1,:),SVC(2,:)],100)],'-ob');
-hold on;
-plot([prctile([TV(3,:),TV(4,:)],20), ...
-    prctile([TV(3,:),TV(4,:)],40), ...
-    prctile([TV(3,:),TV(4,:)],60), ...
-    prctile([TV(3,:),TV(4,:)],80), ...
-    prctile([TV(3,:),TV(4,:)],100)],...
-    [prctile([SVC(3,:),SVC(4,:)],20), ...
-    prctile([SVC(3,:),SVC(4,:)],40), ...
-    prctile([SVC(3,:),SVC(4,:)],60), ...
-    prctile([SVC(3,:),SVC(4,:)],80), ...
-    prctile([SVC(3,:),SVC(4,:)],100)],'-or');
-plot([prctile([TV(5,:),TV(6,:)],20), ...
-    prctile([TV(5,:),TV(6,:)],40), ...
-    prctile([TV(5,:),TV(6,:)],60), ...
-    prctile([TV(5,:),TV(6,:)],80), ...
-    prctile([TV(5,:),TV(6,:)],100)],...
-    [prctile([SVC(5,:),SVC(6,:)],20), ...
-    prctile([SVC(5,:),SVC(6,:)],40), ...
-    prctile([SVC(5,:),SVC(6,:)],60), ...
-    prctile([SVC(5,:),SVC(6,:)],80), ...
-    prctile([SVC(5,:),SVC(6,:)],100)],'-ok');
-IQR = [prctile([SVC(1,:),SVC(2,:)],75) - prctile([SVC(1,:),SVC(2,:)],25),...
-    prctile([SVC(3,:),SVC(4,:)],75) - prctile([SVC(3,:),SVC(4,:)],25),...
-    prctile([SVC(5,:),SVC(6,:)],75) - prctile([SVC(5,:),SVC(6,:)],25)];
+[TVsorted,sortedIdx]=sort([TV(3,:),TV(4,:)]);
+SVCtemp = [SVC(3,:),SVC(4,:)];
+SVCtemp = SVCtemp(sortedIdx);
+k = 0;
 
-figure;plot([prctile([TV(2,:)],20), ...
-    prctile([TV(2,:)],40), ...
-    prctile([TV(2,:)],60), ...
-    prctile([TV(2,:)],80), ...
-    prctile([TV(2,:)],100)],...
-    [prctile([-V_posS(2,:)],20), ...
-    prctile([-V_posS(2,:)],40), ...
-    prctile([-V_posS(2,:)],60), ...
-    prctile([-V_posS(2,:)],80), ...
-    prctile([-V_posS(2,:)],100)],'-ob');
-hold on;
-plot([prctile([TV(4,:)],20), ...
-    prctile([TV(4,:)],40), ...
-    prctile([TV(4,:)],60), ...
-    prctile([TV(4,:)],80), ...
-    prctile([TV(4,:)],100)],...
-    [prctile([-V_posS(4,:)],20), ...
-    prctile([-V_posS(4,:)],40), ...
-    prctile([-V_posS(4,:)],60), ...
-    prctile([-V_posS(4,:)],80), ...
-    prctile([-V_posS(4,:)],100)],'-or');
-plot([prctile([TV(6,:)],20), ...
-    prctile([TV(6,:)],40), ...
-    prctile([TV(6,:)],60), ...
-    prctile([TV(6,:)],80), ...
-    prctile([TV(6,:)],100)],...
-    [prctile([-V_posS(6,:)],20), ...
-    prctile([-V_posS(6,:)],40), ...
-    prctile([-V_posS(6,:)],60), ...
-    prctile([-V_posS(6,:)],80), ...
-    prctile([-V_posS(6,:)],100)],'-ok');
-IQR = [prctile([-V_posS(2,:)],75) - prctile([-V_posS(2,:)],25),...
-    prctile([-V_posS(4,:)],75) - prctile([-V_posS(4,:)],25),...
-    prctile([-V_posS(6,:)],75) - prctile([-V_posS(6,:)],25)];
+for i = 1:length(SVCtemp)/10:length(SVCtemp)
+    k = k + 1;
+    prctlSVC_6(1,k) = nanmedian(SVCtemp(i:(i+(length(SVCtemp)/10)-1)));
+    prctlSVC_6(2,k) = nanmedian(TVsorted(i:(i+(length(SVCtemp)/10)-1)));
+%     
+%     varSVC_6(1,k) = nanvar(SVCtemp(i:(i+(length(SVCtemp)/5)-1)));
+%     varSVC_6(2,k) = nanvar(TVsorted(i:(i+(length(SVCtemp)/5)-1)));
+end
+    
+[TVsorted,sortedIdx]=sort([TV(5,:),TV(6,:)]);
+SVCtemp = [SVC(5,:),SVC(6,:)];
+SVCtemp = SVCtemp(sortedIdx);
+k = 0;
+
+for i = 1:length(SVCtemp)/10:length(SVCtemp)
+    k = k + 1;
+    prctlSVC_20(1,k) = nanmedian(SVCtemp(i:(i+(length(SVCtemp)/10)-1)));
+    prctlSVC_20(2,k) = nanmedian(TVsorted(i:(i+(length(SVCtemp)/10)-1)));
+%     varSVC_20(1,k) = nanvar(SVCtemp(i:(i+(length(SVCtemp)/5)-1)));
+%     varSVC_20(2,k) = nanvar(TVsorted(i:(i+(length(SVCtemp)/5)-1)));
+end
+% bias_20 = mean(prctlSVC_20(1,:));
+bias_20 = (prctlSVC_20(1,1));
+sensitivity_20 = ((prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:)))*((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:)))';
+sensitivity_20 = sensitivity_20./((norm(prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:)))*norm((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:))));
+% sensitivity_20 = corrcoef(((prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:))),((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:))));
+% sensitivity_20 = sensitivity_20(2);
+% bias_6 = mean(prctlSVC_6(1,:));
+bias_6 = (prctlSVC_6(1,1));
+sensitivity_6 = ((prctlSVC_6(2,:) - mean(prctlSVC_6(2,:)))./std(prctlSVC_6(2,:)))*((prctlSVC_6(1,:) - mean(prctlSVC_6(1,:)))./std(prctlSVC_6(1,:)))';
+sensitivity_6 = sensitivity_6./((norm(prctlSVC_6(2,:) - mean(prctlSVC_6(2,:)))./std(prctlSVC_6(2,:)))*norm((prctlSVC_6(1,:) - mean(prctlSVC_6(1,:)))./std(prctlSVC_6(1,:))));
+% sensitivity_6 = corrcoef(((prctlSVC_6(2,:) - mean(prctlSVC_6(2,:)))./std(prctlSVC_6(2,:))),((prctlSVC_6(1,:) - mean(prctlSVC_6(1,:)))./std(prctlSVC_6(1,:))));
+% sensitivity_6 = sensitivity_6(2);
+% sensitivity_6 = tan(acos(sensitivity_6));
+% bias_2 = mean(prctlSVC_2(1,:));
+bias_2 = (prctlSVC_2(1,1));
+sensitivity_2 = ((prctlSVC_2(2,:) - mean(prctlSVC_2(2,:)))./std(prctlSVC_2(2,:)))*((prctlSVC_2(1,:) - mean(prctlSVC_2(1,:)))./std(prctlSVC_2(1,:)))';
+sensitivity_2 = sensitivity_2./((norm(prctlSVC_2(2,:) - mean(prctlSVC_2(2,:)))./std(prctlSVC_2(2,:)))*norm((prctlSVC_2(1,:) - mean(prctlSVC_2(1,:)))./std(prctlSVC_2(1,:))));
+% sensitivity_2 = corrcoef(((prctlSVC_2(2,:) - mean(prctlSVC_2(2,:)))./std(prctlSVC_2(2,:))),((prctlSVC_2(1,:) - mean(prctlSVC_2(1,:)))./std(prctlSVC_2(1,:))));
+% sensitivity_2 = sensitivity_2(2);
+% sensitivity_2 = tan(acos(sensitivity_2));
+% figure;plot(prctlSVC_20(2,:),prctlSVC_20(1,:),'xk');hold on;...
+% plot(prctlSVC_2(2,:),prctlSVC_2(1,:),'or');...
+% plot(prctlSVC_6(2,:),prctlSVC_6(1,:),'og');
+
+% figure;plot(prctlSVC_20(1,:)./sqrt(varSVC_20(1,:)),'-ob');
+% hold on;
+% plot(prctlSVC_2(1,:)./sqrt(varSVC_6(1,:)),'-or')
+% plot(prctlSVC_6(1,:)./sqrt(varSVC_2(1,:)),'-og')
+% figure;plot([sensitivity_2,sensitivity_6,sensitivity_20],'-o')
+
 
 %%
-figure;
-plot(perctl_sb_2(1,:),perctl_sb_2(2,:),'-ob');
-hold on
-plot(perctl_sb_6(1,:),perctl_sb_6(2,:),'-or');
-plot(perctl_sb_20(1,:),perctl_sb_20(2,:),'-ok');
+% SPEM
 
+% [TVsorted,sortedIdx]=sort([TV(2,:)]);
+% V_posStemp = [-V_posS(2,:)];
+% V_posStemp = V_posStemp(sortedIdx);
+% k = 0;
+% for i = 1:length(V_posStemp)/5:length(V_posStemp)
+%     k = k + 1;
+%     prctlSPEMv_2(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
+%     prctlSPEMv_2(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+% end
+% 
+% [TVsorted,sortedIdx]=sort([TV(4,:)]);
+% V_posStemp = [-V_posS(4,:)];
+% V_posStemp = V_posStemp(sortedIdx);
+% k = 0;
+% for i = 1:length(V_posStemp)/5:length(V_posStemp)
+%     k = k + 1;
+%     prctlSPEMv_6(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
+%     prctlSPEMv_6(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+% end
+% 
+% [TVsorted,sortedIdx]=sort([TV(6,:)]);
+% V_posStemp = [-V_posS(6,:)];
+% V_posStemp = V_posStemp(sortedIdx);
+% k = 0;
+% for i = 1:length(V_posStemp)/5:length(V_posStemp)
+%     k = k + 1;
+%     prctlSPEMv_20(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
+%     prctlSPEMv_20(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+% end   
+% figure;plot(prctlSPEMv_20(2,:),prctlSPEMv_20(1,:),'xk');hold on;...
+% plot(prctlSPEMv_2(2,:),prctlSPEMv_2(1,:),'or');...
+% plot(prctlSPEMv_6(2,:),prctlSPEMv_6(1,:),'og');
+% 
+
+%%
