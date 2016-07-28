@@ -9,6 +9,12 @@ classdef MTneuron < handle
         DirectionTuningWidth
         SizeTuningWidthPD
         SizeTuningWidthND
+        InhibitionAmplitudePD
+        InhibitionAmplitudeND
+        ExcitationAmplitudePD
+        ExcitationAmplitudeND
+        BaseLinePD
+        BaseLineND
         SuppressionIndex
         Gain
         BaseLine
@@ -26,6 +32,12 @@ classdef MTneuron < handle
             MT.DirectionTuningWidth = S.DTW;
             MT.SizeTuningWidthPD = S.RTW;
             MT.SizeTuningWidthND = S.nRTW;
+            MT.InhibitionAmplitudePD = S.IA;
+            MT.InhibitionAmplitudeND = S.nIA;
+            MT.ExcitationAmplitudePD = S.EA;
+            MT.ExcitationAmplitudeND = S.nEA;
+            MT.BaseLinePD = S.B;
+            MT.BaseLineND = S.nB;
             MT.SuppressionIndex = S.SI;
             MT.Gain = S.G;
             MT.BaseLine = S.B0;
@@ -40,9 +52,16 @@ classdef MTneuron < handle
             PR = MT.PreferredSizePD;
             nPR = MT.PreferredSizeND;
             STW = MT.SpeedTuningWidth;
-            DTW = MT.DirectionTuningWidth;
+            DTW = MT.DirectionTuningWidth * pi/180;
             RTW = MT.SizeTuningWidthPD;
             nRTW = MT.SizeTuningWidthND;
+            IA = MT.InhibitionAmplitudePD;
+            nIA = MT.InhibitionAmplitudeND;
+            EA = MT.ExcitationAmplitudePD;
+            nEA = MT.ExcitationAmplitudeND;
+            B = MT.BaseLinePD;
+            nB = MT.BaseLineND;
+            
             
             % target motion parameters
             Theta = Target.MotionDirection;
@@ -50,33 +69,37 @@ classdef MTneuron < handle
             R = Target.Size;
             
             
-            Theta = Theta * pi / 180;
-            PD = PD * pi / 180;
-            if (Theta - PD) > pi
-                DDiff = -pi + ((Theta - PD) - pi);
-            elseif (Theta - PD) < -pi
-                DDiff = pi - (-pi - (Theta - PD));
-            else
-                DDiff = (Theta - PD);
-            end
+%             Theta = Theta * pi / 180;
+%             PD = PD * pi / 180;
+%             if (Theta - PD) > pi
+%                 DDiff = -pi + ((Theta - PD) - pi);
+%             elseif (Theta - PD) < -pi
+%                 DDiff = pi - (-pi - (Theta - PD));
+%             else
+%                 DDiff = (Theta - PD);
+%             end
+            DDiff = abs(AngDiff(Theta,PD) * pi/180);
             
             DirectionTune = exp(-( DDiff.^2 )/( 2 * DTW^2 ));
             SpeedTune = exp(-( (log2(S) - (PS)).^2 )./( 2 * STW^2 ));
-            
+            possibleSizes = 0:0.1:10;
             if ~isempty(PR) % if size tuning is defined for the neurons
-                if DDiff <= pi/2
-                    SizeTune = erf(R./PR) - .5*erf(R./(PR + RTW));
+                if (DDiff <= pi/2) 
+                    SizeTune = EA*erf(R./PR) - IA*erf(R./(PR + RTW)) + B;
                 else
-                    SizeTune = erf(R./nPR) - .5*erf(R./(nPR + nRTW));
+                    SizeTune = nEA*erf(R./nPR) - nIA*erf(R./(nPR + nRTW)) + nB; 
                 end
             else
                 SizeTune = 1;
             end
+%             fit = EA*erf((possibleSizes)./PR) - IA*erf((possibleSizes)./(PR + RTW)) + B; 
+%             MT.SuppressionIndex = (max(fit)-fit(end))/(max(fit)-B);
             
             FR = G * DirectionTune .* SpeedTune .* SizeTune + B0; 
             
             MT.FiringRate = FR;
             
+            clear fit;
         end
         
         function SimulateVariance(MT)
