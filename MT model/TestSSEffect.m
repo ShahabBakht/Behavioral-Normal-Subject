@@ -38,7 +38,7 @@ tauS = 1*.15;%.5;%
 Target.MotionSpeed        =   15 * ones(1000,1);
 Target.MotionDirection    =   40 * ones(1000,1);
 
-rmax = 1;%[0,0.09,0.18,0.27]
+rmax = 250;%[0,0.09,0.18,0.27]
 
 i = popSize(end);
 
