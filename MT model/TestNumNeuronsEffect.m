@@ -42,7 +42,7 @@ tauS = 1.0*.15;
 %     sizes(end-2) * ones(500,1); sizes(end-1) * ones(500,1); ...
 %     sizes(end) * ones(500,1)];
 
-for trial = 1:100
+for trial = 1:1000
 Target.MotionSpeed = 15 * ones(1000,1);
 Target.MotionDirection = 40 * ones(1000,1);
 
@@ -64,7 +64,7 @@ k = k + 1;
     npd(k) = round(sqrt(i));%floor(90/(1*i));
     
     [mtpopulation, R, COV] = MTpopulation(Target,nps(k),npd(k),rmax,tauD,tauS);
-    [mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps(k),npd(k),rmax,tauD,tauS);
+    [mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps(k),npd(k),rmax,tauD,tauS,r0,b);
     [TargetEstimate] = DecodeMTpopulation(mtpopulation, R, R_denom,'uncorr_norm');
 %     [TargetEstimate] = DecodeMTpopulation(mtpopulation, real(R));
 %     DIRstd(k,j,trial) = nanstd(TargetEstimate.DIRest);

@@ -415,7 +415,7 @@ for c = 1:6
             X_posS(c,tr,:) = nan;
             V_posS(c,tr,:) = nan;
         else
-            x_posS = x((Send + 20):(Send + 90));
+            x_posS = x((Send + 40):(Send + 110));
 %             plot((Send + 20):(Send + 120),x_posS,'r');hold on;plot(x,'--k');pause;close
             v_posS = (x_posS(end) - x_posS(1))./0.07;
             X_posS(c,tr,:) = x_posS;
@@ -450,24 +450,24 @@ end
 %% plot 
                         
 % 
-% figure;
-% plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;
-% plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);
-% plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);
-% title('Rightward Pursuit')
-% 
-% 
-% figure;
-% plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);hold on;
-% plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);
-% plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);
-% title('Leftward Pursuit')
+figure;
+plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;
+plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);
+plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);
+title('Rightward Pursuit')
+
+
+figure;
+plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);hold on;
+plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);
+plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);
+title('Leftward Pursuit')
 % 
 
 %% Throwing out outliers
 % Leftward
-Uthreshold_L = 0;
-Lthreshold_L = -20;
+Uthreshold_L = 5;
+Lthreshold_L = -15;
 %Rightward
 Uthreshold_R = 20;
 Lthreshold_R = -10;
@@ -484,18 +484,18 @@ V_posS(V_posS < LThresholdMatrix) = nan;
 
 
 % post threshold plot
-% figure;
-% plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;
-% plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);
-% plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);
-% title('Rightward Pursuit')
-% 
-% 
-% figure;
-% plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);hold on;
-% plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);
-% plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);
-% title('Leftward Pursuit')
+figure;
+plot(TV(1,:),V_posS(1,:),'.r','MarkerSize',10);hold on;
+plot(TV(3,:),V_posS(3,:),'.b','MarkerSize',10);
+plot(TV(5,:),V_posS(5,:),'.g','MarkerSize',10);
+title('Rightward Pursuit')
+
+
+figure;
+plot(TV(2,:),-V_posS(2,:),'.r','MarkerSize',10);hold on;
+plot(TV(4,:),-V_posS(4,:),'.b','MarkerSize',10);
+plot(TV(6,:),-V_posS(6,:),'.g','MarkerSize',10);
+title('Leftward Pursuit')
 
 
 %% prediction
@@ -923,10 +923,10 @@ R_2 = mdl.Rsquared.Ordinary;
 % sensitivity_2 = corrcoef(((prctlSVC_2(2,:) - mean(prctlSVC_2(2,:)))./std(prctlSVC_2(2,:))),((prctlSVC_2(1,:) - mean(prctlSVC_2(1,:)))./std(prctlSVC_2(1,:))));
 % sensitivity_2 = sensitivity_2(2);
 % sensitivity_2 = tan(acos(sensitivity_2));
-% figure;plot(prctlSVC_20(2,:),prctlSVC_20(1,:),'xk');hold on;...
-% plot(prctlSVC_2(2,:),prctlSVC_2(1,:),'or');...
-% plot(prctlSVC_6(2,:),prctlSVC_6(1,:),'og');
-
+figure;plot(prctlSVC_20(2,:),prctlSVC_20(1,:),'xk');hold on;...
+plot(prctlSVC_2(2,:),prctlSVC_2(1,:),'or');...
+plot(prctlSVC_6(2,:),prctlSVC_6(1,:),'og');
+% 
 % figure;plot(prctlSVC_20(1,:)./sqrt(varSVC_20(1,:)),'-ob');
 % hold on;
 % plot(prctlSVC_2(1,:)./sqrt(varSVC_6(1,:)),'-or')
@@ -937,67 +937,67 @@ R_2 = mdl.Rsquared.Ordinary;
 %%
 % SPEM
 
-% [TVsorted,sortedIdx]=sort([TV(2,:)]);
-% V_posStemp = [-V_posS(2,:)];
-% V_posStemp = V_posStemp(sortedIdx);
-% k = 0;
-% for i = 1:length(V_posStemp)/5:length(V_posStemp)
-%     k = k + 1;
-%     prctlSPEMv_2(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
-%     prctlSPEMv_2(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
-% end
-% 
-% [TVsorted,sortedIdx]=sort([TV(4,:)]);
-% V_posStemp = [-V_posS(4,:)];
-% V_posStemp = V_posStemp(sortedIdx);
-% k = 0;
-% for i = 1:length(V_posStemp)/5:length(V_posStemp)
-%     k = k + 1;
-%     prctlSPEMv_6(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
-%     prctlSPEMv_6(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
-% end
-% 
-% [TVsorted,sortedIdx]=sort([TV(6,:)]);
-% V_posStemp = [-V_posS(6,:)];
-% V_posStemp = V_posStemp(sortedIdx);
-% k = 0;
-% for i = 1:length(V_posStemp)/5:length(V_posStemp)
-%     k = k + 1;
-%     prctlSPEMv_20(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
-%     prctlSPEMv_20(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
-% end   
-% figure;plot(prctlSPEMv_20(2,:),prctlSPEMv_20(1,:),'xk');hold on;...
-% plot(prctlSPEMv_2(2,:),prctlSPEMv_2(1,:),'or');...
-% plot(prctlSPEMv_6(2,:),prctlSPEMv_6(1,:),'og');
+[TVsorted,sortedIdx]=sort([TV(2,:)]);
+V_posStemp = [-V_posS(2,:)];
+V_posStemp = V_posStemp(sortedIdx);
+k = 0;
+for i = 1:length(V_posStemp)/5:length(V_posStemp)
+    k = k + 1;
+    prctlSPEMv_2(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
+    prctlSPEMv_2(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+end
+
+[TVsorted,sortedIdx]=sort([TV(4,:)]);
+V_posStemp = [-V_posS(4,:)];
+V_posStemp = V_posStemp(sortedIdx);
+k = 0;
+for i = 1:length(V_posStemp)/5:length(V_posStemp)
+    k = k + 1;
+    prctlSPEMv_6(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
+    prctlSPEMv_6(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+end
+
+[TVsorted,sortedIdx]=sort([TV(6,:)]);
+V_posStemp = [-V_posS(6,:)];
+V_posStemp = V_posStemp(sortedIdx);
+k = 0;
+for i = 1:length(V_posStemp)/5:length(V_posStemp)
+    k = k + 1;
+    prctlSPEMv_20(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
+    prctlSPEMv_20(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+end   
+figure;plot(prctlSPEMv_20(2,:),prctlSPEMv_20(1,:),'xk');hold on;...
+plot(prctlSPEMv_2(2,:),prctlSPEMv_2(1,:),'or');...
+plot(prctlSPEMv_6(2,:),prctlSPEMv_6(1,:),'og');
 % 
 
 %% learning rate
 % WhichPartList = {1:10,11:40,41:70,71:100,101:130,131:160};
 % WhichPartList = {1:30,31:60,61:90,91:120,121:150,151:180};
 % WhichPartList = {1:10,11:40,41:70,71:100,101:130,131:160,161:190};
-WhichPartList = {1:20,21:50,51:80,81:110,111:140,141:170,171:200};
+% WhichPartList = {1:20,21:50,51:80,81:110,111:140,141:170,171:200};
 % WhichPartList = {1:30,31:60,61:90,91:120,121:150,151:180,181:210};
-for w = 1:length(WhichPartList)
-    WhichPart = WhichPartList{w};
-SVC = (squeeze(S(:,:,1))-10)*1000./(squeeze(S(:,:,3))-1000);
-[TVsorted,sortedIdx]=sort([TV(5,WhichPart),TV(6,WhichPart)]);
-SVCtemp = [SVC(5,WhichPart),SVC(6,WhichPart)];
-SVCtemp = SVCtemp(sortedIdx);
-k = 0;
-
-for i = 1:length(SVCtemp)/5:length(SVCtemp)
-    k = k + 1;
-    prctlSVC_20(1,k) = nanmedian(SVCtemp(i:(i+(length(SVCtemp)/5)-1)));
-    prctlSVC_20(2,k) = nanmedian(TVsorted(i:(i+(length(SVCtemp)/5)-1)));
-%     varSVC_20(1,k) = nanvar(SVCtemp(i:(i+(length(SVCtemp)/5)-1)));
-%     varSVC_20(2,k) = nanvar(TVsorted(i:(i+(length(SVCtemp)/5)-1)));
-end
-mdl = LinearModel.fit(prctlSVC_20(2,:),prctlSVC_20(1,:));
-bias_20(w) = mdl.Coefficients.Estimate(1);
-sensitivity_20(w) = mdl.Coefficients.Estimate(2);
-R_20(w) = mdl.Rsquared.Ordinary;
-
-% bias_20(w) = (prctlSVC_20(1,1));
-% sensitivity_20(w) = ((prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:)))*((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:)))';
-% sensitivity_20(w) = sensitivity_20(w)./((norm(prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:)))*norm((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:))));
-end
+% for w = 1:length(WhichPartList)
+%     WhichPart = WhichPartList{w};
+% SVC = (squeeze(S(:,:,1))-10)*1000./(squeeze(S(:,:,3))-1000);
+% [TVsorted,sortedIdx]=sort([TV(5,WhichPart),TV(6,WhichPart)]);
+% SVCtemp = [SVC(5,WhichPart),SVC(6,WhichPart)];
+% SVCtemp = SVCtemp(sortedIdx);
+% k = 0;
+% 
+% for i = 1:length(SVCtemp)/5:length(SVCtemp)
+%     k = k + 1;
+%     prctlSVC_20(1,k) = nanmedian(SVCtemp(i:(i+(length(SVCtemp)/5)-1)));
+%     prctlSVC_20(2,k) = nanmedian(TVsorted(i:(i+(length(SVCtemp)/5)-1)));
+% %     varSVC_20(1,k) = nanvar(SVCtemp(i:(i+(length(SVCtemp)/5)-1)));
+% %     varSVC_20(2,k) = nanvar(TVsorted(i:(i+(length(SVCtemp)/5)-1)));
+% end
+% mdl = LinearModel.fit(prctlSVC_20(2,:),prctlSVC_20(1,:));
+% bias_20(w) = mdl.Coefficients.Estimate(1);
+% sensitivity_20(w) = mdl.Coefficients.Estimate(2);
+% R_20(w) = mdl.Rsquared.Ordinary;
+% 
+% % bias_20(w) = (prctlSVC_20(1,1));
+% % sensitivity_20(w) = ((prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:)))*((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:)))';
+% % sensitivity_20(w) = sensitivity_20(w)./((norm(prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:)))*norm((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:))));
+% end
