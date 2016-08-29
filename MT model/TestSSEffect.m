@@ -33,13 +33,13 @@ clc;
 for iter = 1:1
 tauD = 1*.125;%.5;% 
 tauS = 1*.15;%.5;%
-r0 = .0;
-b = 13.4;
+% r0 = .0;
+% b = 13.4;
 
 Target.MotionSpeed        =   15 * ones(1000,1);
 Target.MotionDirection    =   40 * ones(1000,1);
 
-rmax = 566;%[0,0.09,0.18,0.27]
+rmax = 200;%[0,0.09,0.18,0.27]
 
 i = popSize(end);
 
@@ -47,8 +47,8 @@ Target.Size = sizes(end) * ones(1000,1);
 nps = round(sqrt(i));%floor(46/(1*i));
 npd = round(sqrt(i));%floor(90/(1*i));
 
-[mtpopulation, R, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS,r0,b);
-[mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS,r0,b);
+[mtpopulation, R, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS);
+[mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS);
 
 [TargetEstimate] = DecodeMTpopulation(mtpopulation, (R), R_denom, 'uncorr_norm');
 DIRstd = nanstd(TargetEstimate.DIRest);
@@ -124,10 +124,10 @@ intrcptNSS = mdlNSS.Coefficients.Estimate(1);
 
 fprintf('coeff_{SS} = %1.6f and coeff_{nSS} = %1.6f \n intercept_{SS} = %1.6f and intercept_{nSS} = %1.6f \n',coeffSS,coeffNSS,intrcptSS,intrcptNSS); 
 figure;
-plot(SignalCorrSPD(surrSuppMat == 2),NoiseCorr(surrSuppMat == 2),'.k');
+% plot(SignalCorrSPD(surrSuppMat == 2),NoiseCorr(surrSuppMat == 2),'.k');
 % grid on;
 hold on;
-plot(SignalCorrSPD(surrSuppMat == 0),NoiseCorr(surrSuppMat == 0),'.r');
+% plot(SignalCorrSPD(surrSuppMat == 0),NoiseCorr(surrSuppMat == 0),'.r');
 plot([min(sigcorrSS):.01:max(sigcorrSS)],noisPredSS,'k','LineWidth',3)
 plot([min(sigcorrNSS):.01:max(sigcorrNSS)],noisPredNSS,'r','LineWidth',3)
 legend('with SS','no SS')

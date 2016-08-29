@@ -1,4 +1,4 @@
-function [mtpopulation, R, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS,r0,b)
+function [mtpopulation, R, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Population Parameters
@@ -82,7 +82,7 @@ for neuroncount = 1:NumNeurons
     clear MT S
 end
 fprintf('------------------------------------------ \n')
-COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS,r0,b);
+COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS);
 
 % R = nan(Nps*Npd,NumTrials);
 
@@ -93,7 +93,7 @@ R = MCsimulate(mtpopulation,COV)';
 toc;
 end
 
-function COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS,r0,b)
+function COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS)
 
 global Nps Npd MinSpeed MaxSpeed NumNeurons;
 
@@ -159,8 +159,8 @@ rOffDiag2 = exp(-(randomPDdiff.^2)./((180 * td1).^2)) .* ...
 % rOffDiag = (coeff_ss) .* 1 .* rOffDiag2 + (1 - coeff_ss) .* rmax .* rOffDiag1;
 % rOffDiag = (exp(-15.5*coeff_ss)) .* rmax .* rOffDiag1; % exponential relationship
 % rOffDiag = (-2./(1+exp(-15*coeff_ss)) + 2) .* rmax .* rOffDiag1; % sigmoid relationship
-rOffDiag = (-erf(b*coeff_ss)+1) .* rmax .* rOffDiag1 + r0; % erf relationship
-% rOffDiag = (exp(-12*(1-coeff_ss))) .* rmax .* rOffDiag2 + (exp(-12*coeff_ss)) .* rmax .* rOffDiag1;
+% rOffDiag = (-erf(b*coeff_ss)+1) .* rmax .* rOffDiag1 + r0; % erf relationship
+rOffDiag = (exp(-12*(1-coeff_ss))) .* rmax .* rOffDiag2 + (exp(-12*coeff_ss)) .* rmax .* rOffDiag1;
 
 rOnDiag = mean2(rOffDiag) * ones(1,NumNeurons);
 QonDiag = CovOnDiagonal(rOnDiag,NumNeurons);

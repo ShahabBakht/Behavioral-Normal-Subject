@@ -51,20 +51,20 @@ j = 0;
 % DIRm = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
 % SPDstd = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
 % SPDm = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
-for rmax = [250]
+for rmax = [200]
     
     
     j = j + 1;
     k = 0;
 for i = popSize%max(popSize)./popSize%[1,1.5,2,3,4]%log2(2:(62/5):64-62/5)
 %  i = 1;    
-k = k + 1;
+    k = k + 1;
     Target.Size = sizes(k) * ones(1000,1);
     nps(k) = round(sqrt(i));%floor(46/(1*i));
     npd(k) = round(sqrt(i));%floor(90/(1*i));
     
     [mtpopulation, R, COV] = MTpopulation(Target,nps(k),npd(k),rmax,tauD,tauS);
-    [mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps(k),npd(k),rmax,tauD,tauS,r0,b);
+    [mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps(k),npd(k),rmax,tauD,tauS);
     [TargetEstimate] = DecodeMTpopulation(mtpopulation, R, R_denom,'uncorr_norm');
 %     [TargetEstimate] = DecodeMTpopulation(mtpopulation, real(R));
 %     DIRstd(k,j,trial) = nanstd(TargetEstimate.DIRest);
@@ -98,6 +98,12 @@ end
 end
 %% Plots - Speed and Direction variance as a function of #neurons
 % 
+
+SPD(abs(SPD)>100) = nan;
+SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
+SPDvar_std = std(SPDvar,[],2);
+SPDvar_mean = nanmedian(SPDvar,2);
+hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000));
 % SPDstd_mean = median(SPDstd,3);
 % SPDstd_mean(SPDstd_mean>100) = nan;
 % figure;plot(sizes,SPDstd_mean,'-o','LineWidth',2);
