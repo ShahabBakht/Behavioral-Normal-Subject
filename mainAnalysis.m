@@ -466,7 +466,7 @@ title('Leftward Pursuit')
 
 %% Throwing out outliers
 % Leftward
-Uthreshold_L = 5;
+Uthreshold_L = 10;
 Lthreshold_L = -15;
 %Rightward
 Uthreshold_R = 20;
@@ -545,6 +545,19 @@ csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
 % csvwrite('D:\Project Codes\Behavioral-Normal-Subject\Y20.csv',Ydata20);
 % csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
 
+%% PCA and explained variance
+[PCA2.coeff,PCA2.score,PCA2.latent,PCA2.tsquared,PCA2.explained,PCA2.mu] = pca([Xdata6,Ydata6]);
+[PCA6.coeff,PCA6.score,PCA6.latent,PCA6.tsquared,PCA6.explained,PCA6.mu] = pca([Xdata10,Ydata10]);
+[PCA20.coeff,PCA20.score,PCA20.latent,PCA20.tsquared,PCA20.explained,PCA20.mu] = pca([Xdata20,Ydata20]);
+
+
+
+listPCA = ls('D:\Analysis\Behavioral-Normal-Subject\PCAs\');
+sofarPCAs = (size(listPCA,1) - 2)./3;
+
+save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA2_',num2str(sofarPCAs+1),'.mat'],'PCA2');
+save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA6_',num2str(sofarPCAs+1),'.mat'],'PCA6');
+save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA20_',num2str(sofarPCAs+1),'.mat'],'PCA20');
 
 %%
 % Leftward
