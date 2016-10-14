@@ -466,7 +466,7 @@ title('Leftward Pursuit')
 
 %% Throwing out outliers
 % Leftward
-Uthreshold_L = 10;
+Uthreshold_L = 0;
 Lthreshold_L = -15;
 %Rightward
 Uthreshold_R = 20;
@@ -546,18 +546,18 @@ csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
 % csvwrite('D:\Project Codes\Behavioral-Normal-Subject\X20.csv',Xdata20);
 
 %% PCA and explained variance
-[PCA2.coeff,PCA2.score,PCA2.latent,PCA2.tsquared,PCA2.explained,PCA2.mu] = pca([Xdata6,Ydata6]);
-[PCA6.coeff,PCA6.score,PCA6.latent,PCA6.tsquared,PCA6.explained,PCA6.mu] = pca([Xdata10,Ydata10]);
-[PCA20.coeff,PCA20.score,PCA20.latent,PCA20.tsquared,PCA20.explained,PCA20.mu] = pca([Xdata20,Ydata20]);
-
-
-
-listPCA = ls('D:\Analysis\Behavioral-Normal-Subject\PCAs\');
-sofarPCAs = (size(listPCA,1) - 2)./3;
-
-save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA2_',num2str(sofarPCAs+1),'.mat'],'PCA2');
-save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA6_',num2str(sofarPCAs+1),'.mat'],'PCA6');
-save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA20_',num2str(sofarPCAs+1),'.mat'],'PCA20');
+% [PCA2.coeff,PCA2.score,PCA2.latent,PCA2.tsquared,PCA2.explained,PCA2.mu] = pca([Xdata6,Ydata6]);
+% [PCA6.coeff,PCA6.score,PCA6.latent,PCA6.tsquared,PCA6.explained,PCA6.mu] = pca([Xdata10,Ydata10]);
+% [PCA20.coeff,PCA20.score,PCA20.latent,PCA20.tsquared,PCA20.explained,PCA20.mu] = pca([Xdata20,Ydata20]);
+% 
+% 
+% 
+% listPCA = ls('D:\Analysis\Behavioral-Normal-Subject\PCAs\');
+% sofarPCAs = (size(listPCA,1) - 2)./3;
+% 
+% save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA2_',num2str(sofarPCAs+1),'.mat'],'PCA2');
+% save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA6_',num2str(sofarPCAs+1),'.mat'],'PCA6');
+% save(['D:\Analysis\Behavioral-Normal-Subject\PCAs\PCA20_',num2str(sofarPCAs+1),'.mat'],'PCA20');
 
 %%
 % Leftward
@@ -909,16 +909,30 @@ end
 % bias_20 = mean(prctlSVC_20(1,:));
 mdl = LinearModel.fit(prctlSVC_20(2,:),prctlSVC_20(1,:));
 bias_20 = mdl.Coefficients.Estimate(1);
-sensitivity_20 = mdl.Coefficients.Estimate(2);
-R_20 = mdl.Rsquared.Ordinary;
+sensitivity_sacc_20 = mdl.Coefficients.Estimate(2);
+R_sacc_20 = mdl.Rsquared.Ordinary;
+MSE_sacc_20 = mdl.MSE;
+SSE_sacc_20 = mdl.SSE;
+SSR_sacc_20 = mdl.SSR;
+SST_sacc_20 = mdl.SST;
+LL_sacc_20 = mdl.LogLikelihood;
+AIC_sacc_20 = mdl.ModelCriterion.AIC;
+RMSE_sacc_20 = mdl.RMSE;
 % bias_20 = (prctlSVC_20(1,1));
 % sensitivity_20 = ((prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:)))*((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:)))';
 % sensitivity_20 = sensitivity_20./((norm(prctlSVC_20(2,:) - mean(prctlSVC_20(2,:)))./std(prctlSVC_20(2,:)))*norm((prctlSVC_20(1,:) - mean(prctlSVC_20(1,:)))./std(prctlSVC_20(1,:))));
 
 mdl = LinearModel.fit(prctlSVC_6(2,:),prctlSVC_6(1,:));
 bias_6 = mdl.Coefficients.Estimate(1);
-sensitivity_6 = mdl.Coefficients.Estimate(2);
-R_6 = mdl.Rsquared.Ordinary;
+sensitivity_sacc_6 = mdl.Coefficients.Estimate(2);
+R_sacc_6 = mdl.Rsquared.Ordinary;
+MSE_sacc_6 = mdl.MSE;
+SSE_sacc_6 = mdl.SSE;
+SSR_sacc_6 = mdl.SSR;
+SST_sacc_6 = mdl.SST;
+LL_sacc_6 = mdl.LogLikelihood;
+AIC_sacc_6 = mdl.ModelCriterion.AIC;
+RMSE_sacc_6 = mdl.RMSE;
 % bias_6 = (prctlSVC_6(1,1));
 % sensitivity_6 = ((prctlSVC_6(2,:) - mean(prctlSVC_6(2,:)))./std(prctlSVC_6(2,:)))*((prctlSVC_6(1,:) - mean(prctlSVC_6(1,:)))./std(prctlSVC_6(1,:)))';
 % sensitivity_6 = sensitivity_6./((norm(prctlSVC_6(2,:) - mean(prctlSVC_6(2,:)))./std(prctlSVC_6(2,:)))*norm((prctlSVC_6(1,:) - mean(prctlSVC_6(1,:)))./std(prctlSVC_6(1,:))));
@@ -928,8 +942,15 @@ R_6 = mdl.Rsquared.Ordinary;
 % bias_2 = mean(prctlSVC_2(1,:));
 mdl = LinearModel.fit(prctlSVC_2(2,:),prctlSVC_2(1,:));
 bias_2 = mdl.Coefficients.Estimate(1);
-sensitivity_2 = mdl.Coefficients.Estimate(2);
-R_2 = mdl.Rsquared.Ordinary;
+sensitivity_sacc_2 = mdl.Coefficients.Estimate(2);
+R_sacc_2 = mdl.Rsquared.Ordinary;
+MSE_sacc_2 = mdl.MSE;
+SSE_sacc_2 = mdl.SSE;
+SSR_sacc_2 = mdl.SSR;
+SST_sacc_2 = mdl.SST;
+LL_sacc_2 = mdl.LogLikelihood;
+AIC_sacc_2 = mdl.ModelCriterion.AIC;
+RMSE_sacc_2 = mdl.RMSE;
 % bias_2 = (prctlSVC_2(1,1));
 % sensitivity_2 = ((prctlSVC_2(2,:) - mean(prctlSVC_2(2,:)))./std(prctlSVC_2(2,:)))*((prctlSVC_2(1,:) - mean(prctlSVC_2(1,:)))./std(prctlSVC_2(1,:)))';
 % sensitivity_2 = sensitivity_2./((norm(prctlSVC_2(2,:) - mean(prctlSVC_2(2,:)))./std(prctlSVC_2(2,:)))*norm((prctlSVC_2(1,:) - mean(prctlSVC_2(1,:)))./std(prctlSVC_2(1,:))));
@@ -954,35 +975,74 @@ plot(prctlSVC_6(2,:),prctlSVC_6(1,:),'og');
 V_posStemp = [-V_posS(2,:)];
 V_posStemp = V_posStemp(sortedIdx);
 k = 0;
-for i = 1:length(V_posStemp)/5:length(V_posStemp)
+for i = 1:length(V_posStemp)/length(V_posStemp):length(V_posStemp)
     k = k + 1;
-    prctlSPEMv_2(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
-    prctlSPEMv_2(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+    prctlSPEMv_2(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/length(V_posStemp))-1)));
+    prctlSPEMv_2(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/length(V_posStemp))-1)));
 end
 
 [TVsorted,sortedIdx]=sort([TV(4,:)]);
 V_posStemp = [-V_posS(4,:)];
 V_posStemp = V_posStemp(sortedIdx);
 k = 0;
-for i = 1:length(V_posStemp)/5:length(V_posStemp)
+for i = 1:length(V_posStemp)/length(V_posStemp):length(V_posStemp)
     k = k + 1;
-    prctlSPEMv_6(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
-    prctlSPEMv_6(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+    prctlSPEMv_6(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/length(V_posStemp))-1)));
+    prctlSPEMv_6(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/length(V_posStemp))-1)));
 end
 
 [TVsorted,sortedIdx]=sort([TV(6,:)]);
 V_posStemp = [-V_posS(6,:)];
 V_posStemp = V_posStemp(sortedIdx);
 k = 0;
-for i = 1:length(V_posStemp)/5:length(V_posStemp)
+for i = 1:length(V_posStemp)/length(V_posStemp):length(V_posStemp)
     k = k + 1;
-    prctlSPEMv_20(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/5)-1)));
-    prctlSPEMv_20(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/5)-1)));
+    prctlSPEMv_20(1,k) = nanmean(V_posStemp(i:(i+(length(V_posStemp)/length(V_posStemp))-1)));
+    prctlSPEMv_20(2,k) = nanmean(TVsorted(i:(i+(length(V_posStemp)/length(V_posStemp))-1)));
 end   
 figure;plot(prctlSPEMv_20(2,:),prctlSPEMv_20(1,:),'xk');hold on;...
 plot(prctlSPEMv_2(2,:),prctlSPEMv_2(1,:),'or');...
 plot(prctlSPEMv_6(2,:),prctlSPEMv_6(1,:),'og');
 % 
+
+
+mdl = LinearModel.fit(prctlSPEMv_20(2,:),prctlSPEMv_20(1,:));
+bias_20 = mdl.Coefficients.Estimate(1);
+sensitivity_spem_20 = mdl.Coefficients.Estimate(2);
+R_20 = mdl.Rsquared.Ordinary;
+MSE_spem_20 = mdl.MSE;
+SSE_spem_20 = mdl.SSE;
+SSR_spem_20 = mdl.SSR;
+SST_spem_20 = mdl.SST;
+LL_spem_20 = mdl.LogLikelihood;
+AIC_spem_20 = mdl.ModelCriterion.AIC;
+RMSE_spem_20 = mdl.RMSE;
+
+
+mdl = LinearModel.fit(prctlSPEMv_6(2,:),prctlSPEMv_6(1,:));
+bias_6 = mdl.Coefficients.Estimate(1);
+sensitivity_spem_6 = mdl.Coefficients.Estimate(2);
+R_6 = mdl.Rsquared.Ordinary;
+MSE_spem_6 = mdl.MSE;
+SSE_spem_6 = mdl.SSE;
+SSR_spem_6 = mdl.SSR;
+SST_spem_6 = mdl.SST;
+LL_spem_6 = mdl.LogLikelihood;
+AIC_spem_6 = mdl.ModelCriterion.AIC;
+RMSE_spem_6 = mdl.RMSE;
+
+mdl = LinearModel.fit(prctlSPEMv_2(2,:),prctlSPEMv_2(1,:));
+bias_2 = mdl.Coefficients.Estimate(1);
+sensitivity_spem_2 = mdl.Coefficients.Estimate(2);
+R_2 = mdl.Rsquared.Ordinary;
+MSE_spem_2 = mdl.MSE;
+SSE_spem_2 = mdl.SSE;
+SSR_spem_2 = mdl.SSR;
+SST_spem_2 = mdl.SST;
+LL_spem_2 = mdl.LogLikelihood;
+AIC_spem_2 = mdl.ModelCriterion.AIC;
+RMSE_spem_2 = mdl.RMSE;
+
 
 %% learning rate
 % WhichPartList = {1:10,11:40,41:70,71:100,101:130,131:160};
