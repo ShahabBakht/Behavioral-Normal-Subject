@@ -1,13 +1,13 @@
 %% Number of neurons as a function of stimulus size
 
-sizes=sqrt(0)+(1:2:21); % the avg eccentricity of the stimuli is sqrt(5) deg
+sizes=sqrt(0)+(1:2:11); % the avg eccentricity of the stimuli is sqrt(5) deg
 popSize=zeros(1,5);
 errSize=zeros(1,5); % reviewer #2 asked us to calculate the error of our estimates
 % fun=@(x1) (1.14*x1.^-0.76); % Albright & Desimone 87 Exp Brain Res (mm/deg)
 fun=@(x1) (6*x1.^-0.9); % Erickson (mm/deg)
 for i=1:length(sizes) % calculate the # of  neurons for each size
 %     popSize(i)=integral(fun,0.5,sizes(i))+1; % integral from 0.5 to edge, between 0 to 0.5 is roughly 1 mm (2mm/deg)
-    popSize(i)=integral(fun,22 - sizes(i),22 + sizes(i)); % integral from 1 to edge, between 0 to 1 is roughly (9mm/deg) erickson et al. EBR
+    popSize(i)=integral(fun,12 - sizes(i),12 + sizes(i)); % integral from 1 to edge, between 0 to 1 is roughly (9mm/deg) erickson et al. EBR
 %     popSize(i)=integral(fun,.5,sizes(i)) + 9;
 
     errSize(i)=integral(fun,0.5,sizes(i)*0.16+0.51)+1; % integral of the error
@@ -51,7 +51,7 @@ j = 0;
 % DIRm = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
 % SPDstd = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
 % SPDm = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
-for rmax = [200]
+for rmax = [250]
     
     
     j = j + 1;
@@ -72,7 +72,8 @@ for i = popSize%max(popSize)./popSize%[1,1.5,2,3,4]%log2(2:(62/5):64-62/5)
 %     DIRm(k,j,trial) = nanmedian(TargetEstimate.DIRest);
 %     SPDm(k,j,trial) = nanmedian(TargetEstimate.SPDest);
     SPD(k,j,trial,:) = TargetEstimate.SPDest;
-    
+    FR = cell2mat(cellfun(@(x)(x.FiringRate),mtpopulation,'UniformOutput',false));
+    SNR(k,j,trial,:) = sum(FR,2)./std(FR,[],2);
     
     
 %     DIRstd(j,trial,:) = [nanstd(TargetEstimate.DIRest(1:500)),...
@@ -101,9 +102,20 @@ end
 
 SPD(abs(SPD)>100) = nan;
 SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
-SPDvar_std = std(SPDvar,[],2);
+SPDvar_std = nanstd(SPDvar,[],2);
 SPDvar_mean = nanmedian(SPDvar,2);
-hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000));
+figure;hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000),'k','abshhxy', .3);
+hold on;plot(sizes, SPDvar_mean,'.k','MarkerSize',30);
+xlabel('size (degree)');ylabel('standard deviation (degree)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
+
+SNR(abs(SNR)>100) = nan;
+SNRmean1 = squeeze(nanmean(SNR,4));
+SNRmean = nanmean(SNRmean1,2);
+SNRstd = nanstd(SNRmean1,[],2);
+
+figure;hh = ploterr(sizes, SNRmean, [], SNRstd./sqrt(1000),'k','abshhxy', .3);
+hold on;plot(sizes, SNRmean,'.k','MarkerSize',30);
+xlabel('size (degree)');ylabel('S/N (degree)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
 % SPDstd_mean = median(SPDstd,3);
 % SPDstd_mean(SPDstd_mean>100) = nan;
 % figure;plot(sizes,SPDstd_mean,'-o','LineWidth',2);
@@ -155,8 +167,9 @@ hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000));
 %     TargetEstimate.SPDest(abs(TargetEstimate.SPDest)>100) = nan;
 %     mdl = LinearModel.fit(Target.MotionSpeed',TargetEstimate.SPDest);
 % %     biasSPD(k,j,trial) = mdl.Coefficients.Estimate(1);
-% %     sensitivitySPD(k,j,trial) = mdl.Coefficients.Estimate(2);
+%     sensitivitySPD(k,j,trial) = mdl.Coefficients.Estimate(2);
 %     RSPD(k,j,trial) = mdl.Rsquared.Adjusted;
+%     RMSE(k,j,trial) = mdl.RMSE;
 %     
 %     
 %     estimateSPD(k,j,trial,:) = TargetEstimate.SPDest;
@@ -171,9 +184,10 @@ hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000));
 % end
 %%
 
-% figure;plot(nps.*npd,median(sensitivitySPD,3),'-o','LineWidth',2);
-% xlabel('number of neurons');ylabel('Speed Sensitivity');legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
-% 
+% figure;plot(2*sizes,median(RMSE,3),'.k','MarkerSize',25);
+% hold on;ploterr(2*sizes, median(RMSE,3), [], std(RMSE,[],3)./sqrt(1000),'-k','abshhxy', .3);
+% xlabel('size (degree)');ylabel('RMSE (degree)');legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
+
 % figure;plot(nps.*npd,median(biasSPD,3),'-o','LineWidth',2);
 % xlabel('number of neurons');ylabel('Speed Bias');legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
 % 

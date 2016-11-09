@@ -466,7 +466,7 @@ title('Leftward Pursuit')
 
 %% Throwing out outliers
 % Leftward
-Uthreshold_L = 0;
+Uthreshold_L = 5;
 Lthreshold_L = -15;
 %Rightward
 Uthreshold_R = 20;

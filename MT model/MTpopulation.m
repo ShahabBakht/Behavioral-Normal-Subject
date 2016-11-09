@@ -71,7 +71,7 @@ for neuroncount = 1:NumNeurons
 %     S.B       =       [];
 %     S.nB      =       [];
 %     S.SI      =       [];
-    S.G       =       .1;%8;%100;4                     % Gain
+    S.G       =       .5;%8;%.1;%100;4                     % Gain
     S.B0      =       0;%2;                       % Base line activity
     
     MT = MTneuron(S);
