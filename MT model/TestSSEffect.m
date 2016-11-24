@@ -31,15 +31,15 @@ errSize=round(10*errSize); % multiple the error a constant of 10
 clc;
 
 for iter = 1:1
-tauD = 1*.125;%.5;% 
-tauS = 1*.15;%.5;%
+tauD = 1.8*.125;%.5;% 
+tauS = 1.8*.15;%.5;%
 % r0 = .0;
 % b = 13.4;
 
 Target.MotionSpeed        =   15 * ones(1000,1);
 Target.MotionDirection    =   40 * ones(1000,1);
 
-rmax = 200;%[0,0.09,0.18,0.27]
+rmax = .3;%[0,0.09,0.18,0.27]
 
 i = popSize(end);
 
@@ -50,7 +50,7 @@ npd = round(sqrt(i));%floor(90/(1*i));
 [mtpopulation, R, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS);
 [mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS);
 
-[TargetEstimate] = DecodeMTpopulation(mtpopulation, (R), R_denom, 'uncorr_norm');
+[TargetEstimate] = DecodeMTpopulation(mtpopulation, (R), mtpopulation_denom, R_denom, 'uncorr_norm');
 DIRstd = nanstd(TargetEstimate.DIRest);
 SPDstd = nanstd(TargetEstimate.SPDest);
 DIRm = nanmedian(TargetEstimate.DIRest);
@@ -103,9 +103,9 @@ SignalCorr = SignalCorrSPD.*SignalCorrDIR;
 
 
 
-sigcorrSS = SignalCorrSPD(surrSuppMat == 2);
+sigcorrSS = SignalCorrDIR(surrSuppMat == 2);
 noisecorrSS = NoiseCorr(surrSuppMat == 2);
-sigcorrNSS = SignalCorrSPD(surrSuppMat == 0);
+sigcorrNSS = SignalCorrDIR(surrSuppMat == 0);
 noisecorrNSS = NoiseCorr(surrSuppMat == 0);
 
 CorrelationMatrix_ss = corrcoef(noisecorrSS,sigcorrSS);
@@ -124,12 +124,12 @@ intrcptNSS = mdlNSS.Coefficients.Estimate(1);
 
 fprintf('coeff_{SS} = %1.6f and coeff_{nSS} = %1.6f \n intercept_{SS} = %1.6f and intercept_{nSS} = %1.6f \n',coeffSS,coeffNSS,intrcptSS,intrcptNSS); 
 figure;
-% plot(SignalCorrSPD(surrSuppMat == 2),NoiseCorr(surrSuppMat == 2),'.k');
+plot(SignalCorrDIR(surrSuppMat == 2),NoiseCorr(surrSuppMat == 2),'.k');
 % grid on;
 hold on;
-% plot(SignalCorrSPD(surrSuppMat == 0),NoiseCorr(surrSuppMat == 0),'.r');
-plot([min(sigcorrSS):.01:max(sigcorrSS)],noisPredSS,'k','LineWidth',3)
-plot([min(sigcorrNSS):.01:max(sigcorrNSS)],noisPredNSS,'r','LineWidth',3)
+figure;plot(SignalCorrDIR(surrSuppMat == 0),NoiseCorr(surrSuppMat == 0),'.r');
+% plot([min(sigcorrSS):.01:max(sigcorrSS)],noisPredSS,'k','LineWidth',3)
+% plot([min(sigcorrNSS):.01:max(sigcorrNSS)],noisPredNSS,'r','LineWidth',3)
 legend('with SS','no SS')
 
 end

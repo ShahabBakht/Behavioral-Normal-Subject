@@ -20,6 +20,7 @@ classdef MTneuron < handle
         BaseLine
         FiringRate
         Variance
+        RFLocation
     end
     
     methods
@@ -41,6 +42,7 @@ classdef MTneuron < handle
             MT.SuppressionIndex = S.SI;
             MT.Gain = S.G;
             MT.BaseLine = S.B0;
+            MT.RFLocation = S.rfloc;
         end
         
         function SimulateMeanFiringRate(MT,Target)
@@ -61,12 +63,13 @@ classdef MTneuron < handle
             nEA = MT.ExcitationAmplitudeND;
             B = MT.BaseLinePD;
             nB = MT.BaseLineND;
-            
+            rfLocation = MT.RFLocation;
             
             % target motion parameters
             Theta = Target.MotionDirection;
             S = Target.MotionSpeed;
             R = Target.Size;
+            
             
             
 %             Theta = Theta * pi / 180;
@@ -85,9 +88,9 @@ classdef MTneuron < handle
             possibleSizes = 0:0.1:10;
             if ~isempty(PR) % if size tuning is defined for the neurons
                 if (DDiff <= pi/2) 
-                    SizeTune = EA*erf(R./PR) - IA*erf(R./(PR + RTW)) + B;
+                    SizeTune = EA*erf((R-rfLocation)./PR) - IA*erf((R-rfLocation)./(PR + RTW)) + B;
                 else
-                    SizeTune = nEA*erf(R./nPR) - nIA*erf(R./(nPR + nRTW)) + nB; 
+                    SizeTune = nEA*erf((R-rfLocation)./nPR) - nIA*erf((R-rfLocation)./(nPR + nRTW)) + nB; 
                 end
             else
                 SizeTune = 1;
@@ -104,8 +107,8 @@ classdef MTneuron < handle
         
         function SimulateVariance(MT)
             
-            c = 1;
-            MT.Variance = c * mean(MT.FiringRate);
+            c = 1.5;
+            MT.Variance = c * (MT.FiringRate);
             
         end
     end

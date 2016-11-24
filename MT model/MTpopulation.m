@@ -14,7 +14,7 @@ MaxDirection = 359;
 
 % paramDist = LoadMTdata();
 CurrentFolder = pwd;
-cd('D:\Project Codes\Behavioral-Normal-Subject\MT model\DaveData');
+cd('/Users/shahab/MNI/Project-Codes/Behavioral-Normal-Subject/MT model/DaveData');
 data = load('paramDist.mat');
 cd(CurrentFolder);
 paramDist = data.paramDist;
@@ -33,6 +33,7 @@ PSmesh = rand(1,Nps * Npd)*(log2(MaxSpeed) - log2(MinSpeed)) + log2(MinSpeed);
 PDmesh = rand(1,Npd * Nps)*(MaxDirection - MinDirection) + MinDirection;
 % NumNeurons = size(PSs,2)*size(PDs,2);
 NumNeurons = length(PSmesh);
+RFLocations = setRFLocations(Target);
 tic;
 % simulate population firing rate and variance
 mtpopulation = cell(1,NumNeurons);
@@ -71,8 +72,9 @@ for neuroncount = 1:NumNeurons
 %     S.B       =       [];
 %     S.nB      =       [];
 %     S.SI      =       [];
-    S.G       =       .5;%8;%.1;%100;4                     % Gain
+    S.G       =       1;%8;%.1;%100;4             % Gain
     S.B0      =       0;%2;                       % Base line activity
+    S.rfloc = RFLocations(neuroncount);            % Location of the receptive field (degree)
     
     MT = MTneuron(S);
     MT.SimulateMeanFiringRate(Target);
@@ -93,6 +95,37 @@ R = MCsimulate(mtpopulation,COV)';
 toc;
 end
 
+function RFLocations = setRFLocations(Target)
+global NumNeurons
+Sizes = 0:0.1:(Target.Size(1) - 0.1);
+% popSize=zeros(1,5);
+% errSize=zeros(1,5); % reviewer #2 asked us to calculate the error of our estimates
+
+fun=@(x1) (6*x1.^-0.9); % Erickson (mm/deg)
+for l=1:length(Sizes) % calculate the # of  neurons for each size
+    %     popSize(i)=integral(fun,0.5,sizes(i))+1; % integral from 0.5 to edge, between 0 to 0.5 is roughly 1 mm (2mm/deg)
+    totPopSize(l)=integral(fun,12 - Sizes(l),12 + Sizes(l)); % integral from 1 to edge, between 0 to 1 is roughly (9mm/deg) erickson et al. EBR
+    %     popSize(i)=integral(fun,.5,sizes(i)) + 9;
+    
+    %     errSize(i)=integral(fun,0.5,sizes(i)*0.16+0.51)+1; % integral of the error
+end
+
+totPopSize=round(20*totPopSize); % new constant
+for l = 2:length(Sizes)
+    popSizeIncr(l-1) = totPopSize(l) - totPopSize(l-1);
+end
+popSizeIncr = [totPopSize(1),popSizeIncr];
+
+RFLocations = [];
+for l = 1:length(popSizeIncr)
+    RFLocations = [RFLocations,Sizes(l)*ones(1,popSizeIncr(l))];
+end
+
+numExtraNeurons = (NumNeurons - length(RFLocations));
+RFLocations = [RFLocations,Target.Size(1)*rand(1,numExtraNeurons)];
+
+end
+
 function COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS)
 
 global Nps Npd MinSpeed MaxSpeed NumNeurons;
@@ -100,7 +133,7 @@ global Nps Npd MinSpeed MaxSpeed NumNeurons;
 fprintf(['Calculating Covariance Matrix ... '])
 PD = cellfun(@(x)(x.PreferredDirection),mtpopulation)';
 PS = cellfun(@(x)(x.PreferredSpeed),mtpopulation)';
-rOnDiag = cellfun(@(x)(x.Variance),mtpopulation).^0.5;
+% rOnDiag = cellfun(@(x)(x.Variance),mtpopulation).^0.5;
 
 % uncomment this for considering surround suppression
 SI = cellfun(@(x)(x.SuppressionIndex),mtpopulation)';
@@ -124,6 +157,7 @@ SI = cellfun(@(x)(x.SuppressionIndex),mtpopulation)';
 % ts(ts < 0) = 1e-3;
 
 coeff_ss = (SI1 + SI2)./max(max(SI1 + SI2));
+coeff_ss = zeros(size(coeff_ss));
 % coeff_ss = 1.3 * (max(maxx(SI1 + SI2)) - SI1 - SI2 - 2);
 
 % SI-independent correlation matrix
@@ -142,27 +176,54 @@ PSrep = repmat(PS,1,length(PS));
 
 PDdiff = abs(AngDiff(PDrep,PDrep'));
 PSdiff = abs(PSrep - PSrep');
+randomPDdiff = (max(max(PDdiff)) - min(min(PDdiff)))*rand(size(PDdiff));
+randomPSdiff = (max(max(PSdiff)) - min(min(PSdiff)))*rand(size(PSdiff));
 % rOffDiag = rmax .* exp((-(PDrep.^2)-(PDrep'.^2)+2.*PD*PD')./((360 * td).^2)) .* ...
 %                 exp((-(PSrep.^2)-(PSrep'.^2)+2.*PS*PS')./(((log2(MaxSpeed) - log2(MinSpeed)) * ts).^2)) ;
 
 % rOffDiag = rmax .* exp(-(PDdiff.^2)./((180 * td).^2)) .* ...
 %                 exp(-(PSdiff.^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts).^2)) ;
-rOffDiag1 = exp(-(PDdiff.^2)./((180 * td1).^2)) .* ...
-                exp(-(PSdiff.^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts1).^2)) ;
+% rOffDiag1 = exp(-(PDdiff.^2)./((180 * td1).^2)) .* ...
+%                 exp(-(PSdiff.^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts1).^2)) ;
 
-randomPDdiff = (max(max(PDdiff)) - min(min(PDdiff)))*rand(size(PDdiff));
-randomPSdiff = (max(max(PSdiff)) - min(min(PSdiff)))*rand(size(PSdiff));
-rOffDiag2 = exp(-(randomPDdiff.^2)./((180 * td1).^2)) .* ...
-                exp(-(randomPSdiff.^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts1).^2)) ;
+% Gaussian Kernel
+rOffDiag1 = exp(-(((1-coeff_ss).*PDdiff + coeff_ss.*randomPDdiff).^2)./((180 * td1).^2)) .* ...
+                exp(-(((1-coeff_ss).*PSdiff + coeff_ss.*randomPSdiff).^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts1).^2)) ;
+            
+% Logistic Kernel
+% rOffDiag1_1 = 1./((exp((((1-coeff_ss).*PDdiff + coeff_ss.*randomPDdiff).^2)./((180 * td1).^2))) + 2 + ...
+%     (exp(-(((1-coeff_ss).*PDdiff + coeff_ss.*randomPDdiff).^2)./((180 * td1).^2))));
+% rOffDiag2_1 = 1./(( exp((((1-coeff_ss).*PSdiff + coeff_ss.*randomPSdiff).^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts1).^2))) + 2 + ...
+%     ( exp(-(((1-coeff_ss).*PSdiff + coeff_ss.*randomPSdiff).^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts1).^2))));
+% rOffDiag1 = rOffDiag1_1 .* rOffDiag2_1;
+
+
+
+
+% rOffDiag2 = exp(-(randomPDdiff.^2)./((180 * td1).^2)) .* ...
+%                 exp(-(randomPSdiff.^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts1).^2)) ;
+% rOffDiag1 = rOffDiag2;
 % rOffDiag2 = std2(rOffDiag1)*rand(size(rOffDiag1));
 % rOffDiag = rmax * (coeff_ss .* rOffDiag2 + (1 - coeff_ss) .*  rOffDiag1);
 % rOffDiag = (coeff_ss) .* 1 .* rOffDiag2 + (1 - coeff_ss) .* rmax .* rOffDiag1;
 % rOffDiag = (exp(-15.5*coeff_ss)) .* rmax .* rOffDiag1; % exponential relationship
 % rOffDiag = (-2./(1+exp(-15*coeff_ss)) + 2) .* rmax .* rOffDiag1; % sigmoid relationship
 % rOffDiag = (-erf(b*coeff_ss)+1) .* rmax .* rOffDiag1 + r0; % erf relationship
-rOffDiag = (exp(-12*(1-coeff_ss))) .* rmax .* rOffDiag2 + (exp(-12*coeff_ss)) .* rmax .* rOffDiag1;
 
-rOnDiag = mean2(rOffDiag) * ones(1,NumNeurons);
+% rOffDiag = nan(size(rOffDiag2));
+% rOffDiag(coeff_ss>quantile(reshape(coeff_ss,size(coeff_ss,1)*size(coeff_ss,2),1),.8)) = rOffDiag2(coeff_ss>quantile(reshape(coeff_ss,size(coeff_ss,1)*size(coeff_ss,2),1),.8)) ;
+% rOffDiag(coeff_ss<=quantile(reshape(coeff_ss,size(coeff_ss,1)*size(coeff_ss,2),1),.8)) = rOffDiag1(coeff_ss<=quantile(reshape(coeff_ss,size(coeff_ss,1)*size(coeff_ss,2),1),.8));
+
+% rOffDiag = (exp(-12*(1-coeff_ss))) .* rmax .* rOffDiag2 + (exp(-12*coeff_ss)) .* rmax .* rOffDiag1;
+% rOffDiag = (exp(-2*(coeff_ss))) .* rmax .* rOffDiag1 + (1-exp(-2*coeff_ss)) .* rmax .* rOffDiag2;
+
+rmax = rmax./ (sum(sum(rOffDiag1 - diag(diag(rOffDiag1))))./(size(rOffDiag1,1)*(size(rOffDiag1,1)-1)));
+rOffDiag = rmax .*rOffDiag1;
+% rOffDiag = rOffDiag1 - (sum(sum(rOffDiag1 - diag(diag(rOffDiag1))))./(size(rOffDiag1,1)*(size(rOffDiag1,1)-1))) + rmax;
+
+
+
+rOnDiag = sum(sum(rOffDiag - diag(diag(rOffDiag))))./(size(rOffDiag,1)*(size(rOffDiag,1)-1)) * ones(1,NumNeurons);
 QonDiag = CovOnDiagonal(rOnDiag,NumNeurons);
 QoffDiag = CovOffDiagoanl(rOffDiag,NumNeurons);
 Q = QoffDiag - diag(diag(QoffDiag)) + diag(QonDiag);
@@ -177,17 +238,19 @@ global NumNeurons
 for ncount = 1:(NumNeurons)
     MT = mtpopulation{ncount};
     mu(:,ncount) = MT.FiringRate;
+    sigma(:,ncount) = MT.Variance;
+    
     clear MT
 end
 
 try
-R = mvnrnd(mu,COV);
+R = mvnrnd(zeros(size(mu)),COV);
 catch
     COV
     pause
 end
 % R = mvnrnd(mu,COV,NumTrials);
-
+R = R.*sqrt(sigma) + mu;
 end
 
 function v = CovOffDiagoanl(r,N)
