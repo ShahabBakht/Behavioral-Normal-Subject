@@ -49,6 +49,10 @@ save('Data_bothSS.mat','Data_bothSS');
 save('Data_bothnSS.mat','Data_bothnSS');
 save('Data_SSnSS.mat','Data_SSnSS');
 
+CorrMatrix(:,1) = DIRpref(:,4);
+CorrMatrix(:,2) = noiseCorrDataDirectionTuning(:,1);
+CorrMatrix(:,3) = noiseCorrDataDirectionTuning(:,2);
+CorrMatrix(:,4) = noiseCorrDataDirectionTuning(:,3);
 
 %%
 

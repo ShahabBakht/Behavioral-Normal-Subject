@@ -157,7 +157,7 @@ SI = cellfun(@(x)(x.SuppressionIndex),mtpopulation)';
 % ts(ts < 0) = 1e-3;
 
 coeff_ss = (SI1 + SI2)./max(max(SI1 + SI2));
-coeff_ss = zeros(size(coeff_ss));
+% coeff_ss = zeros(size(coeff_ss));
 % coeff_ss = 1.3 * (max(maxx(SI1 + SI2)) - SI1 - SI2 - 2);
 
 % SI-independent correlation matrix

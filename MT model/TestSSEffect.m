@@ -1,13 +1,13 @@
 %% Number of neurons as a function of stimulus size
 
-sizes=sqrt(0)+(1:2:21); % the avg eccentricity of the stimuli is sqrt(5) deg
+sizes=sqrt(0)+(.2:2:10.2); % the avg eccentricity of the stimuli is sqrt(5) deg
 popSize=zeros(1,5);
 errSize=zeros(1,5); % reviewer #2 asked us to calculate the error of our estimates
 % fun=@(x1) (1.14*x1.^-0.76); % Albright & Desimone 87 Exp Brain Res (mm/deg)
 fun=@(x1) (6*x1.^-0.9); % Erickson (mm/deg)
 for i=1:length(sizes) % calculate the # of neurons for each size
     %     popSize(i)=integral(fun ,0.5,sizes(i))+1; % integral from 0.5 to edge, between 0 to 0.5 is roughly 1 mm (2mm/deg)
-    popSize(i)=integral(fun,22 - sizes(i),22 + sizes(i)); % integral from 1 to edge, between 0 to 1 is roughly (9mm/deg) erickson et al. EBR
+    popSize(i)=integral(fun,12 - sizes(i),12 + sizes(i)); % integral from 1 to edge, between 0 to 1 is roughly (9mm/deg) erickson et al. EBR
     %     popSize(i)=integral(fun,.5,sizes(i)) + 9;
     
     errSize(i)=integral(fun,0.5,sizes(i)*0.16+0.51)+1; % integral of the error
@@ -31,8 +31,8 @@ errSize=round(10*errSize); % multiple the error a constant of 10
 clc;
 
 for iter = 1:1
-tauD = 1.8*.125;%.5;% 
-tauS = 1.8*.15;%.5;%
+tauD = 2*.125;%.5;% 
+tauS = 2*.15;%.5;%
 % r0 = .0;
 % b = 13.4;
 
@@ -50,7 +50,7 @@ npd = round(sqrt(i));%floor(90/(1*i));
 [mtpopulation, R, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS);
 [mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS);
 
-[TargetEstimate] = DecodeMTpopulation(mtpopulation, (R), mtpopulation_denom, R_denom, 'uncorr_norm');
+[TargetEstimate] = DecodeMTpopulation(mtpopulation, (R), mtpopulation_denom, R_denom, 'weighted_uncorr_norm');
 DIRstd = nanstd(TargetEstimate.DIRest);
 SPDstd = nanstd(TargetEstimate.SPDest);
 DIRm = nanmedian(TargetEstimate.DIRest);
@@ -101,36 +101,57 @@ SignalCorrSPD = corrcoef(SpeedTune');
 SignalCorrDIR = corrcoef(DirectionTune');
 SignalCorr = SignalCorrSPD.*SignalCorrDIR;
 
+simCorr = nan((length(mtpopulation))*(length(mtpopulation) - 1)./2,4);
+counter = 0;
+for i = 1:length(mtpopulation)
+    for j = i:length(mtpopulation)
+        counter = counter + 1;
+        simCorr(counter,1) = SignalCorrDIR(i,j); % signal correlation
+        simCorr(counter,2) = NoiseCorr(i,j); % noise correlation
+        simCorr(counter,3) = SI(i); % suppression index first neuron
+        simCorr(counter,4) = SI(j); % suppresion index secodn neuron
+    end
+end
 
 
 sigcorrSS = SignalCorrDIR(surrSuppMat == 2);
 noisecorrSS = NoiseCorr(surrSuppMat == 2);
 sigcorrNSS = SignalCorrDIR(surrSuppMat == 0);
 noisecorrNSS = NoiseCorr(surrSuppMat == 0);
+sigcorrSSnSS = SignalCorrDIR(surrSuppMat == 1);
+noisecorrSSnSS = NoiseCorr(surrSuppMat == 1);
 
 CorrelationMatrix_ss = corrcoef(noisecorrSS,sigcorrSS);
 CorrelationMatrix_nss = corrcoef(noisecorrNSS,sigcorrNSS);
+CorrelationMatrix_ssnss = corrcoef(noisecorrSSnSS,sigcorrSSnSS);
 
 
 mdlSS = LinearModel.fit(sigcorrSS,noisecorrSS);
 noisPredSS = predict(mdlSS,[min(sigcorrSS):.01:max(sigcorrSS)]');
 mdlNSS = LinearModel.fit(sigcorrNSS,noisecorrNSS);
 noisPredNSS = predict(mdlNSS,[min(sigcorrNSS):.01:max(sigcorrNSS)]');
+mdlSSnSS = LinearModel.fit(sigcorrSSnSS,noisecorrSSnSS);
+noisPredSSnSS = predict(mdlSSnSS,[min(sigcorrSSnSS):.01:max(sigcorrSSnSS)]');
 
 coeffSS(iter) = mdlSS.Coefficients.Estimate(2);
 intrcptSS = mdlSS.Coefficients.Estimate(1);
 coeffNSS(iter) = mdlNSS.Coefficients.Estimate(2);
 intrcptNSS = mdlNSS.Coefficients.Estimate(1);
+coeffSSnSS(iter) = mdlSSnSS.Coefficients.Estimate(2);
+intrcptSSnSS = mdlSSnSS.Coefficients.Estimate(1);
 
-fprintf('coeff_{SS} = %1.6f and coeff_{nSS} = %1.6f \n intercept_{SS} = %1.6f and intercept_{nSS} = %1.6f \n',coeffSS,coeffNSS,intrcptSS,intrcptNSS); 
+
+fprintf('coeff_{SS} = %1.6f and coeff_{nSS} = %1.6f and coeff_{SSnSS} = %1.6f \n intercept_{SS} = %1.6f and intercept_{nSS} = %1.6f and intercept_{SSnSS} = %1.6f \n',coeffSS,coeffNSS,coeffSSnSS,intrcptSS,intrcptNSS,intrcptSSnSS); 
 figure;
-plot(SignalCorrDIR(surrSuppMat == 2),NoiseCorr(surrSuppMat == 2),'.k');
+plot(SignalCorrDIR(surrSuppMat == 2),NoiseCorr(surrSuppMat == 2),'.b');
 % grid on;
 hold on;
-figure;plot(SignalCorrDIR(surrSuppMat == 0),NoiseCorr(surrSuppMat == 0),'.r');
+plot(SignalCorrDIR(surrSuppMat == 0),NoiseCorr(surrSuppMat == 0),'.r');
+plot(SignalCorrDIR(surrSuppMat == 1),NoiseCorr(surrSuppMat == 1),'.k');
+
 % plot([min(sigcorrSS):.01:max(sigcorrSS)],noisPredSS,'k','LineWidth',3)
 % plot([min(sigcorrNSS):.01:max(sigcorrNSS)],noisPredNSS,'r','LineWidth',3)
-legend('with SS','no SS')
+legend('with SS','no SS', 'SS and nSS')
 
 end
 
