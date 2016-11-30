@@ -59,7 +59,7 @@ switch method
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%% 
         %%% window for Suppresson Index
-        Weight = nan(size(SI));
+%         Weight = nan(size(SI));
         Weight(SI>quantile(SI,.4)) = 1;
         Weight(SI<=quantile(SI,.4)) = 0;
         
@@ -78,7 +78,7 @@ switch method
 %         Weight_denom(RFLocationdenom>4) = 1;
         
         %%% window for RF location and Suppresson Index
-        
+%         
 %         Weight = nan(size(RFLocation));
 %         Weight(RFLocation<=4 & SI>quantile(SI,.5)) = 1;
 %         Weight(RFLocation>4 | SI<=quantile(SI,.5)) = 0;

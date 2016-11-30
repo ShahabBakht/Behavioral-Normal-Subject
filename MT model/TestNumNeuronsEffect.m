@@ -31,8 +31,8 @@ errSize=round(10*errSize); % multiple the error a constant of 10
 %% Single Speed for all the trials
 % tauD = 1.5*.125;%0.1125;%0.1125;%
 % tauS = 1.5*.15;%0.135;%0.1350;%
-tauD = 2.0*.125;
-tauS = 2.0*.15;
+tauD = .25;
+tauS = .5;
 % Target.MotionSpeed        =   [15 * ones(500,1);15 * ones(500,1);...
 %     15 * ones(500,1); 15 * ones(500,1); ...
 %     15 * ones(500,1)];
@@ -53,7 +53,7 @@ j = 0;
 % DIRm = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
 % SPDstd = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
 % SPDm = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
-for rmax = [.3 ]
+for rmax = [.25 ]
     
     
     j = j + 1;
@@ -119,17 +119,17 @@ SPD(abs(SPD)>100) = nan;
 SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
 SPDvar_std = nanstd(SPDvar,[],2);
 SPDvar_mean = nanmedian(SPDvar,2);
-figure(1);hold on;hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000),'g','abshhxy', .3);
-hold on;plot(sizes, SPDvar_mean,'.g','MarkerSize',30);
+figure(1);hold on;hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000),'c','abshhxy', .3);
+hold on;plot(sizes, SPDvar_mean,'.c','MarkerSize',30);
 xlabel('size (degree)');ylabel('standard deviation (degree)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
 
-SPD(abs(SPD)>100) = nan;
-SPDmean = squeeze(nanmean(SPD(:,:,:,:),4));
-SPDmean_std = nanstd(SPDmean,[],2);
-SPDmean_mean = nanmedian(SPDmean,2);
-figure(2);hold on;hh = ploterr(sizes, SPDmean_mean, [], SPDmean_std./sqrt(1000),'g','abshhxy', .3);
-hold on;plot(sizes, SPDmean_mean,'.g','MarkerSize',30);
-xlabel('size (degree)');ylabel('speed (degree/s)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
+% SPD(abs(SPD)>100) = nan;
+% SPDmean = squeeze(nanmean(SPD(:,:,:,:),4));
+% SPDmean_std = nanstd(SPDmean,[],2);
+% SPDmean_mean = nanmedian(SPDmean,2);
+% figure(2);hold on;hh = ploterr(sizes, SPDmean_mean, [], SPDmean_std./sqrt(1000),'g','abshhxy', .3);
+% hold on;plot(sizes, SPDmean_mean,'.g','MarkerSize',30);
+% xlabel('size (degree)');ylabel('speed (degree/s)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
 
 
 % % 

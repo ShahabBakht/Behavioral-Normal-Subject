@@ -1,5 +1,5 @@
 [FileName,PathName] = uigetfile('*.mat','Select the noise correlation data');
-addpath('D:\Project Codes\Behavioral-Normal-Subject\MT model');
+addpath('/Users/shahab/MNI/Project-Codes/Behavioral-Normal-Subject/MT model');
 load([PathName,FileName]);
 delta = .0001;
 DIRlr = 0:pi/4:(2*pi);
@@ -61,9 +61,9 @@ hold on;plot(DIRpref(~SS1&~SS2,3),noiseCorrDataDirectionTuning(~SS1&~SS2,1),'.r'
 hold on;plot(DIRpref(xor(SS1,SS2),3),noiseCorrDataDirectionTuning(xor(SS1,SS2),1),'.k','MarkerSize',15);hold on;
 title('noise correlation vs. tuning difference')
 
-figure;plot(DIRpref(SS1&SS2,4),noiseCorrDataDirectionTuning(SS1&SS2,1),'.b','MarkerSize',15);hold on;
-hold on;plot(DIRpref(~SS1&~SS2,4),noiseCorrDataDirectionTuning(~SS1&~SS2,1),'.r','MarkerSize',15);hold on;
-hold on;plot(DIRpref(xor(SS1,SS2),4),noiseCorrDataDirectionTuning(xor(SS1,SS2),1),'.k','MarkerSize',15);hold on;
+figure;plot(DIRpref(SS1&SS2,4),noiseCorrDataDirectionTuning(SS1&SS2,1),'*b','MarkerSize',5);hold on;
+hold on;plot(DIRpref(~SS1&~SS2,4),noiseCorrDataDirectionTuning(~SS1&~SS2,1),'*r','MarkerSize',5);hold on;
+hold on;plot(DIRpref(xor(SS1,SS2),4),noiseCorrDataDirectionTuning(xor(SS1,SS2),1),'*k','MarkerSize',5);hold on;
 title('noise correlation vs. signal correlation')
 
 mdl = LinearModel.fit(DIRpref(SS1&SS2,3),noiseCorrDataDirectionTuning(SS1&SS2,1));

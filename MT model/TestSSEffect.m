@@ -29,17 +29,26 @@ errSize=round(10*errSize); % multiple the error a constant of 10
 
 %% Simulate the population activity
 clc;
+TauD = (.1:.2:5)*.125;%.5;% 
+TauS = (.1:.2:5)*.15;%.5;%
+% TauD = .2;
+% TauS = .5;
+% Rmax = .1:.01:.5;
+[meshTauD,meshTauS] = meshgrid(TauD,TauS);
 
-for iter = 1:1
-tauD = 2*.125;%.5;% 
-tauS = 2*.15;%.5;%
+for iter = 1:size(meshTauD,1)*size(meshTauD,2)%1%1::length(Rmax)%
+
+tauD = meshTauD(iter);
+tauS = meshTauS(iter);
+% tauD = TauD;
+% tauS = TauS;
 % r0 = .0;
 % b = 13.4;
 
 Target.MotionSpeed        =   15 * ones(1000,1);
 Target.MotionDirection    =   40 * ones(1000,1);
 
-rmax = .3;%[0,0.09,0.18,0.27]
+rmax = .25;%Rmax(iter);%[0,0.09,0.18,0.27]
 
 i = popSize(end);
 
@@ -141,19 +150,24 @@ coeffSSnSS(iter) = mdlSSnSS.Coefficients.Estimate(2);
 intrcptSSnSS = mdlSSnSS.Coefficients.Estimate(1);
 
 
-fprintf('coeff_{SS} = %1.6f and coeff_{nSS} = %1.6f and coeff_{SSnSS} = %1.6f \n intercept_{SS} = %1.6f and intercept_{nSS} = %1.6f and intercept_{SSnSS} = %1.6f \n',coeffSS,coeffNSS,coeffSSnSS,intrcptSS,intrcptNSS,intrcptSSnSS); 
-figure;
-plot(SignalCorrDIR(surrSuppMat == 2),NoiseCorr(surrSuppMat == 2),'.b');
-% grid on;
-hold on;
-plot(SignalCorrDIR(surrSuppMat == 0),NoiseCorr(surrSuppMat == 0),'.r');
-plot(SignalCorrDIR(surrSuppMat == 1),NoiseCorr(surrSuppMat == 1),'.k');
+% fprintf('coeff_{SS} = %1.6f and coeff_{nSS} = %1.6f and coeff_{SSnSS} = %1.6f \n intercept_{SS} = %1.6f and intercept_{nSS} = %1.6f and intercept_{SSnSS} = %1.6f \n',coeffSS,coeffNSS,coeffSSnSS,intrcptSS,intrcptNSS,intrcptSSnSS); 
+% figure(2);
+% plot(SignalCorrDIR(surrSuppMat == 2),NoiseCorr(surrSuppMat == 2),'.','Color',[0,0,1]);
+% % grid on;
+% hold on;
+% plot(SignalCorrDIR(surrSuppMat == 0),NoiseCorr(surrSuppMat == 0),'.','Color',[1,0,0]);
+% plot(SignalCorrDIR(surrSuppMat == 1),NoiseCorr(surrSuppMat == 1),'.','Color',[0,0,0]);
 
 % plot([min(sigcorrSS):.01:max(sigcorrSS)],noisPredSS,'k','LineWidth',3)
 % plot([min(sigcorrNSS):.01:max(sigcorrNSS)],noisPredNSS,'r','LineWidth',3)
-legend('with SS','no SS', 'SS and nSS')
+% legend('with SS','no SS', 'SS and nSS')
+
+[IDX,Distance] = knnsearch(simCorr,CorrMatrix,'K',5);
+meanDistance(iter) = 1./mean2(max(Distance,[],2));
+
 
 end
+% figure;surf(meshTauD,meshTauS,reshape(meanDistance,sqrt(length(meanDistance)),sqrt(length(meanDistance))));
 
 %% Effect of SS on Firirng Rate
 

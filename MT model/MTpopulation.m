@@ -157,6 +157,15 @@ SI = cellfun(@(x)(x.SuppressionIndex),mtpopulation)';
 % ts(ts < 0) = 1e-3;
 
 coeff_ss = (SI1 + SI2)./max(max(SI1 + SI2));
+coeff_ss(SI1>median(SI) & SI2>median(SI)) = .33*randn(size(coeff_ss(SI1>median(SI) & SI2>median(SI))))+.66;
+coeff_ss(xor(SI1<median(SI),SI2<median(SI))) = .33*randn(size(coeff_ss(xor(SI1<median(SI),SI2<median(SI))))) + .33;
+coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = .33*rand(size(coeff_ss(SI1<=median(SI) & SI2<=median(SI))));
+% coeff_ss(SI1>median(SI) & SI2>median(SI)) = .2*randn(size(coeff_ss(SI1>median(SI) & SI2>median(SI))))+.75;
+% coeff_ss(xor(SI1<median(SI),SI2<median(SI))) = .2*randn(size(coeff_ss(xor(SI1<median(SI),SI2<median(SI)))))+.5;
+% coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = .2*randn(size(coeff_ss(SI1<=median(SI) & SI2<=median(SI))))+.25;
+
+
+
 % coeff_ss = zeros(size(coeff_ss));
 % coeff_ss = 1.3 * (max(maxx(SI1 + SI2)) - SI1 - SI2 - 2);
 
@@ -189,6 +198,7 @@ randomPSdiff = (max(max(PSdiff)) - min(min(PSdiff)))*rand(size(PSdiff));
 % Gaussian Kernel
 rOffDiag1 = exp(-(((1-coeff_ss).*PDdiff + coeff_ss.*randomPDdiff).^2)./((180 * td1).^2)) .* ...
                 exp(-(((1-coeff_ss).*PSdiff + coeff_ss.*randomPSdiff).^2)./(((log2(MaxSpeed) - log2(MinSpeed)) * ts1).^2)) ;
+
             
 % Logistic Kernel
 % rOffDiag1_1 = 1./((exp((((1-coeff_ss).*PDdiff + coeff_ss.*randomPDdiff).^2)./((180 * td1).^2))) + 2 + ...
