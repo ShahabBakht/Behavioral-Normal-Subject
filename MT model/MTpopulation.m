@@ -14,7 +14,7 @@ MaxDirection = 359;
 
 % paramDist = LoadMTdata();
 CurrentFolder = pwd;
-cd('D:\Project Codes\Behavioral-Normal-Subject\MT model\DaveData');
+cd('/Users/shahab/MNI/Project-Codes/Behavioral-Normal-Subject/MT model/DaveData');
 data = load('paramDist.mat');
 cd(CurrentFolder);
 paramDist = data.paramDist;
@@ -130,7 +130,7 @@ function COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS)
 
 global Nps Npd MinSpeed MaxSpeed NumNeurons;
 
-fprintf(['Calculating Covariance Matrix ... '])
+% fprintf(['Calculating Covariance Matrix ... '])
 PD = cellfun(@(x)(x.PreferredDirection),mtpopulation)';
 PS = cellfun(@(x)(x.PreferredSpeed),mtpopulation)';
 % rOnDiag = cellfun(@(x)(x.Variance),mtpopulation).^0.5;
@@ -156,16 +156,24 @@ SI = cellfun(@(x)(x.SuppressionIndex),mtpopulation)';
 % td(td < 0) = 1e-3;
 % ts(ts < 0) = 1e-3;
 
-coeff_ss = (SI1 + SI2)./max(max(SI1 + SI2));
+% coeff_ss proportional to SIs
+coeff_ss = (SI1 + SI2)./max(max(SI1 + SI2)); 
+
+% coeff_ss soft threshold
 % coeff_ss(SI1>median(SI) & SI2>median(SI)) = .4*randn(size(coeff_ss(SI1>median(SI) & SI2>median(SI))))+.6;
 % coeff_ss(xor(SI1<median(SI),SI2<median(SI))) = .4*randn(size(coeff_ss(xor(SI1<median(SI),SI2<median(SI))))) + .3;
 % coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = .4*rand(size(coeff_ss(SI1<=median(SI) & SI2<=median(SI))));
+coeff_ss(SI1>median(SI) & SI2>median(SI)) = .2*randn(size(coeff_ss(SI1>median(SI) & SI2>median(SI))))+.8;
+coeff_ss(xor(SI1<median(SI),SI2<median(SI))) = .5*randn(size(coeff_ss(xor(SI1<median(SI),SI2<median(SI))))) + .3;
+coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = .4*rand(size(coeff_ss(SI1<=median(SI) & SI2<=median(SI))));
+
+% coeff_ss hard threshold
 % coeff_ss(SI1>median(SI) & SI2>median(SI)) = 1;
 % coeff_ss(xor(SI1<median(SI),SI2<median(SI))) = .5;
 % coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = 0;
 
-
-coeff_ss = zeros(size(coeff_ss));
+% coeff_ss zero
+% coeff_ss = zeros(size(coeff_ss));
 % coeff_ss = 1.3 * (max(maxx(SI1 + SI2)) - SI1 - SI2 - 2);
 
 % SI-independent correlation matrix

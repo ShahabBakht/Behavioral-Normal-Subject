@@ -1,5 +1,5 @@
 [FileName,PathName] = uigetfile('*.mat','Select the noise correlation data');
-addpath('D:\Project Codes\Behavioral-Normal-Subject\MT model');
+addpath('/Users/shahab/MNI/Project-Codes/Behavioral-Normal-Subject/MT model');
 load([PathName,FileName]);
 delta = .0001;
 DIRlr = 0:pi/4:(2*pi);

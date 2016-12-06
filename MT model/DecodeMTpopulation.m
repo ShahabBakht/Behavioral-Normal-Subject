@@ -1,4 +1,4 @@
-function [TargetEstimate] = DecodeMTpopulation(mtpopulation, R_numerator, mtpopulation_denom, R_denominator,method)
+function [TargetEstimate] = DecodeMTpopulation(mtpopulation, R_numerator, mtpopulation_denom, R_denominator,method, param)
 
 %%%%%%%%%%%%%%%%
 epcilon = .1;
@@ -60,32 +60,50 @@ switch method
         %%%%%%%%%%%%%%%%%%%%%%%%%%% 
         %%% window for Suppresson Index
 %         Weight = nan(size(SI));
-        Weight(SI>quantile(SI,.4)) = 1;
-        Weight(SI<=quantile(SI,.4)) = 0;
-        
-        Weight_denom = nan(size(SIdenom));
-        Weight_denom(SIdenom>quantile(SIdenom,.4)) = 1;
-        Weight_denom(SIdenom<=quantile(SIdenom,.4)) = 0;
+%         Weight(SI>quantile(SI,.5)) = 1;
+%         Weight(SI<=quantile(SI,.5)) = 1;
+%         
+%         Weight_denom = nan(size(SIdenom));
+%         Weight_denom(SIdenom>quantile(SIdenom,.5)) = 1;
+%         Weight_denom(SIdenom<=quantile(SIdenom,.5)) = 1;
         
         %%% window for RF location
-        
+%         rf = param(1);
 %         Weight = nan(size(RFLocation));
-%         Weight(RFLocation<=4) = 1;
-%         Weight(RFLocation>4) = 1;
+%         Weight(RFLocation<=rf) = 1;
+%         Weight(RFLocation>rf) = 0;
 %         
 %         Weight_denom = nan(size(RFLocationdenom));
-%         Weight_denom(RFLocationdenom<=4) = 1;
-%         Weight_denom(RFLocationdenom>4) = 1;
+%         Weight_denom(RFLocationdenom<=rf) = 1;
+%         Weight_denom(RFLocationdenom>rf) = 0;
         
         %%% window for RF location and Suppresson Index
-%         
+%         rf = param(1);  
 %         Weight = nan(size(RFLocation));
-%         Weight(RFLocation<=4 & SI>quantile(SI,.5)) = 1;
-%         Weight(RFLocation>4 | SI<=quantile(SI,.5)) = 0;
+%         Weight(RFLocation<=rf & SI>quantile(SI,.5)) = 1;
+%         Weight(RFLocation>rf | SI<=quantile(SI,.5)) = 0;
 %         
 %         Weight_denom = nan(size(RFLocationdenom));
-%         Weight_denom(RFLocationdenom<=4 & SIdenom>quantile(SIdenom,.5)) = 1;
-%         Weight_denom(RFLocationdenom>4 | SIdenom<=quantile(SIdenom,.5)) = 0;
+%         Weight_denom(RFLocationdenom<=rf & SIdenom>quantile(SIdenom,.5)) = 1;
+%         Weight_denom(RFLocationdenom>rf | SIdenom<=quantile(SIdenom,.5)) = 0;
+
+        %%% window for RF location (hard) and Suppresson Index (soft parametric)
+        
+        rf = param(1);
+        a = param(2);
+        c = param(3);
+        
+        Weight_RF = nan(size(RFLocation));
+        Weight_RF(RFLocation<=rf) = 1;
+        Weight_RF(RFLocation>rf) = 0;
+        Weight_SI = sigmf(SI,[a c]);
+        Weight = Weight_RF.*Weight_SI;
+        
+        Weight_RF = nan(size(RFLocationdenom));
+        Weight_RF(RFLocationdenom<=rf) = 1;
+        Weight_RF(RFLocationdenom>rf) = 0;
+        Weight_SI = sigmf(SIdenom,[a c]);
+        Weight_denom = Weight_RF.*Weight_SI;
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%
         

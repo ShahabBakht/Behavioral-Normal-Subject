@@ -36,7 +36,7 @@ TauS = (.1:.2:5)*.15;%.5;%
 % Rmax = .1:.01:.5;
 [meshTauD,meshTauS] = meshgrid(TauD,TauS);
 
-for iter = 1:size(meshTauD,1)*size(meshTauD,2)%1%1::length(Rmax)%
+for iter = 1:size(meshTauD,1)*size(meshTauD,2)%length(Rmax)%1%1::
 
 tauD = meshTauD(iter);
 tauS = meshTauS(iter);
@@ -167,7 +167,7 @@ meanDistance(iter) = 1./mean2(max(Distance,[],2));
 
 
 end
-% figure;surf(meshTauD,meshTauS,reshape(meanDistance,sqrt(length(meanDistance)),sqrt(length(meanDistance))));
+figure;surf(meshTauD,meshTauS,reshape(meanDistance,sqrt(length(meanDistance)),sqrt(length(meanDistance))));
 
 %% Effect of SS on Firirng Rate
 
