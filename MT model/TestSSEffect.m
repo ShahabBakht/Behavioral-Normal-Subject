@@ -37,9 +37,11 @@ TauS = (.1:.2:5)*.15;%.5;%
 [meshTauD,meshTauS] = meshgrid(TauD,TauS);
 
 for iter = 1:size(meshTauD,1)*size(meshTauD,2)%length(Rmax)%1%1::
-
-tauD = meshTauD(iter);
-tauS = meshTauS(iter);
+    param(1) = 3;
+    param(2) = 0;
+    param(3) = .5;
+    tauD = meshTauD(iter);
+    tauS = meshTauS(iter);
 % tauD = TauD;
 % tauS = TauS;
 % r0 = .0;
@@ -59,7 +61,7 @@ npd = round(sqrt(i));%floor(90/(1*i));
 [mtpopulation, R, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS);
 [mtpopulation_denom, R_denom, COV] = MTpopulation(Target,nps,npd,rmax,tauD,tauS);
 
-[TargetEstimate] = DecodeMTpopulation(mtpopulation, (R), mtpopulation_denom, R_denom, 'weighted_uncorr_norm');
+[TargetEstimate] = DecodeMTpopulation(mtpopulation, (R), mtpopulation_denom, R_denom, 'weighted_uncorr_norm',param);
 DIRstd = nanstd(TargetEstimate.DIRest);
 SPDstd = nanstd(TargetEstimate.SPDest);
 DIRm = nanmedian(TargetEstimate.DIRest);

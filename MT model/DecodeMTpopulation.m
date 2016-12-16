@@ -96,13 +96,13 @@ switch method
         Weight_RF = nan(size(RFLocation));
         Weight_RF(RFLocation<=rf) = 1;
         Weight_RF(RFLocation>rf) = 0;
-        Weight_SI = sigmf(SI,[a c]);
+        Weight_SI = sigmf(SI,[a quantile(SIdenom,.5)]);
         Weight = Weight_RF.*Weight_SI;
         
         Weight_RF = nan(size(RFLocationdenom));
         Weight_RF(RFLocationdenom<=rf) = 1;
         Weight_RF(RFLocationdenom>rf) = 0;
-        Weight_SI = sigmf(SIdenom,[a c]);
+        Weight_SI = sigmf(SIdenom,[a quantile(SIdenom,.5)]);
         Weight_denom = Weight_RF.*Weight_SI;
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%

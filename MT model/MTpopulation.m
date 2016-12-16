@@ -14,7 +14,7 @@ MaxDirection = 359;
 
 % paramDist = LoadMTdata();
 CurrentFolder = pwd;
-cd('/Users/shahab/MNI/Project-Codes/Behavioral-Normal-Subject/MT model/DaveData');
+cd('D:\Project Codes\Behavioral-Normal-Subject\MT model\DaveData');
 data = load('paramDist.mat');
 cd(CurrentFolder);
 paramDist = data.paramDist;
@@ -25,14 +25,16 @@ paramDist = data.paramDist;
 
 % parcellating the range of speeds and directions for preferred speed and
 % direction
-PSs = log2(MinSpeed):(log2(MaxSpeed) - log2(MinSpeed))/Nps:(log2(MaxSpeed) - (log2(MaxSpeed) - log2(MinSpeed))/Nps);
-PDs = MinDirection:(MaxDirection - MinDirection)/Npd:(MaxDirection - (MaxDirection - MinDirection)/Npd);
+% PSs = log2(MinSpeed):(log2(MaxSpeed) - log2(MinSpeed))/Nps:(log2(MaxSpeed) - (log2(MaxSpeed) - log2(MinSpeed))/Nps);
+% PDs = MinDirection:(MaxDirection - MinDirection)/Npd:(MaxDirection - (MaxDirection - MinDirection)/Npd);
 
-[PSmesh, PDmesh] = meshgrid(PSs,PDs);
+% [PSmesh, PDmesh] = meshgrid(PSs,PDs);
 % PSmesh = rand(1,Nps * Npd)*(log2(MaxSpeed) - log2(MinSpeed)) + log2(MinSpeed);
 % PDmesh = rand(1,Npd * Nps)*(MaxDirection - MinDirection) + MinDirection;
-NumNeurons = size(PSs,2)*size(PDs,2);
-% NumNeurons = length(PSmesh);
+PSmesh = randi((log2(MaxSpeed) - log2(MinSpeed))+1,1,Nps * Npd) - 2;
+PDmesh = randi(((MaxDirection - MinDirection)+1)/8,1,Npd * Nps)*8 - 1 + MinDirection;
+% NumNeurons = size(PSs,2)*size(PDs,2);
+NumNeurons = length(PSmesh);
 RFLocations = setRFLocations(Target);
 tic;
 % simulate population firing rate and variance

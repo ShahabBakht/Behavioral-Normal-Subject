@@ -1,8 +1,8 @@
 %% Number of neurons as a function of stimulus size
 
-sizes=sqrt(0)+[3,10];%(.2:2:10.2); % the avg eccentricity of the stimuli is sqrt(5) deg
-popSize=zeros(1,2);
-errSize=zeros(1,2); % reviewer #2 asked us to calculate the error of our estimates
+sizes=sqrt(0)+[1,3,10];%(.2:2:10.2); % the avg eccentricity of the stimuli is sqrt(5) deg
+popSize=zeros(1,3);
+errSize=zeros(1,3); % reviewer #2 asked us to calculate the error of our estimates
 % fun=@(x1) (1.14*x1.^-0.76); % Albright & Desimone 87 Exp Brain Res (mm/deg)
 fun=@(x1) (6*x1.^-0.9); % Erickson (mm/deg)
 for i=1:length(sizes) % calculate the # of  neurons for each size
@@ -44,8 +44,9 @@ tauS = .5;
 %     sizes(end-2) * ones(500,1); sizes(end-1) * ones(500,1); ...
 %     sizes(end) * ones(500,1)];
 slopecount = 1;
-for slope = [0,10,inf];%[0,.2,.5,1,2,5,10,20,40,100,inf]
-    param(1) = 3;
+for slope =  0%[0,.2,.5,1,2,5,10,20,40,100,1e4]
+    % set decoding parameters -  read-out
+    param(1) = 4;
     param(2) = slope;
     param(3) = .5;
     rmax = .25;
@@ -54,7 +55,7 @@ for slope = [0,10,inf];%[0,.2,.5,1,2,5,10,20,40,100,inf]
         Target.MotionDirection = 0 * ones(1000,1);
         
         j = 0;
-        % set decoding parameters -  read-out
+        
         
         % DIRstd = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
         % DIRm = nan(length([1,1.5,2,3,4]),length([0,0.09,0.18,0.27,0.36,0.45]));
@@ -126,20 +127,20 @@ for slope = [0,10,inf];%[0,.2,.5,1,2,5,10,20,40,100,inf]
     SPD(abs(SPD)>100) = nan;
     SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
     SPDvar_mean(slopecount,:)= nanmedian(SPDvar,2);
-    spemSI1(slopecount) = (SPDvar_mean(slopecount,2)-SPDvar_mean(slopecount,1))./SPDvar_mean(slopecount,2);
+    spemSI1(slopecount) = (SPDvar_mean(slopecount,3)-SPDvar_mean(slopecount,2))./SPDvar_mean(slopecount,3);
 %     spemSI2(slopecount) = (SPDvar_mean(slopecount,3)-SPDvar_mean(slopecount,2));
     slopecount = slopecount + 1;
 end
 %% Plots - Speed and Direction variance as a function of #neurons
 % 
 % 
-% SPD(abs(SPD)>100) = nan;
-% SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
-% SPDvar_std = nanstd(SPDvar,[],2);
-% SPDvar_mean = nanmedian(SPDvar,2);
-% figure(1);hold on;hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000),'b','abshhxy', .3);
-% hold on;plot(sizes, SPDvar_mean,'.b','MarkerSize',30);
-% xlabel('size (degree)');ylabel('standard deviation (degree)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
+SPD(abs(SPD)>100) = nan;
+SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
+SPDvar_std = nanstd(SPDvar,[],2);
+SPDvar_mean = nanmedian(SPDvar,2);
+figure(1);hold on;hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000),'k','abshhxy', .3);
+hold on;plot(sizes, SPDvar_mean,'.k','MarkerSize',30);
+xlabel('size (degree)');ylabel('standard deviation (degree)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
 
 % SPD(abs(SPD)>100) = nan;
 % SPDmean = squeeze(nanmean(SPD(:,:,:,:),4));
