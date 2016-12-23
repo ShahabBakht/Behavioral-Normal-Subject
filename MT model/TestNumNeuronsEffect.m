@@ -50,7 +50,7 @@ for slope =  100%[0,.2,.5,1,2,5,10,20,40,100,1e4]
     param(2) = slope;
     param(3) = .5;
     rmax = .25;
-    for trial = 1:5000
+    for trial = 1:50
         Target.MotionSpeed = 15 * ones(1000,1);
         Target.MotionDirection = 0 * ones(1000,1);
         

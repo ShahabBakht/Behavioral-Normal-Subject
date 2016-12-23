@@ -14,7 +14,7 @@ MaxDirection = 359;
 
 % paramDist = LoadMTdata();
 CurrentFolder = pwd;
-cd('/Users/shahab/MNI/Project-Codes/Behavioral-Normal-Subject/MT model/DaveData');
+cd('D:\Project Codes\Behavioral-Normal-Subject\MT model\DaveData');
 data = load('paramDist.mat');
 cd(CurrentFolder);
 paramDist = data.paramDist;
@@ -36,13 +36,13 @@ PDmesh = randi(((MaxDirection - MinDirection)+1)/8,1,Npd * Nps)*8 - 1 + MinDirec
 % NumNeurons = size(PSs,2)*size(PDs,2);
 NumNeurons = length(PSmesh);
 RFLocations = setRFLocations(Target);
-tic;
+% tic;
 % simulate population firing rate and variance
 mtpopulation = cell(1,NumNeurons);
 for neuroncount = 1:NumNeurons
-    if neuroncount == NumNeurons
-        fprintf([num2str(neuroncount), ' neurons simulated \n'])
-    end
+%     if neuroncount == NumNeurons
+%         fprintf([num2str(neuroncount), ' neurons simulated \n'])
+%     end
     S.PS      =       PSmesh(neuroncount);      % Preferred Speed
     S.PD      =       PDmesh(neuroncount);      % Preferred Direction
     S.STW     =       (1.5);                    % Width of Speed Tuning Curve 1.45
@@ -85,7 +85,7 @@ for neuroncount = 1:NumNeurons
     mtpopulation{neuroncount} = MT;
     clear MT S
 end
-fprintf('------------------------------------------ \n')
+% fprintf('------------------------------------------ \n')
 COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS);
 
 % R = nan(Nps*Npd,NumTrials);
@@ -94,7 +94,7 @@ R = MCsimulate(mtpopulation,COV)';
 % R = MCsimulate(mtpopulation,COV,NumTrials)';
 
 
-toc;
+% toc;
 end
 
 function RFLocations = setRFLocations(Target)

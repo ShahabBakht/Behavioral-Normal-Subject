@@ -102,7 +102,7 @@ classdef MTneuron < handle
             
             MT.FiringRate = FR;
             
-            clear fit;
+            
         end
         
         function SimulateVariance(MT)
