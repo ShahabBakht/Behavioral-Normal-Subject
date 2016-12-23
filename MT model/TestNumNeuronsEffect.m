@@ -44,13 +44,13 @@ tauS = .5;
 %     sizes(end-2) * ones(500,1); sizes(end-1) * ones(500,1); ...
 %     sizes(end) * ones(500,1)];
 slopecount = 1;
-for slope =  0%[0,.2,.5,1,2,5,10,20,40,100,1e4]
+for slope =  100%[0,.2,.5,1,2,5,10,20,40,100,1e4]
     % set decoding parameters -  read-out
-    param(1) = 4;
+    param(1) = 2;
     param(2) = slope;
     param(3) = .5;
     rmax = .25;
-    for trial = 1:1000
+    for trial = 1:5000
         Target.MotionSpeed = 15 * ones(1000,1);
         Target.MotionDirection = 0 * ones(1000,1);
         
@@ -126,21 +126,21 @@ for slope =  0%[0,.2,.5,1,2,5,10,20,40,100,1e4]
     
     SPD(abs(SPD)>100) = nan;
     SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
-    SPDvar_mean(slopecount,:)= nanmedian(SPDvar,2);
-    spemSI1(slopecount) = (SPDvar_mean(slopecount,3)-SPDvar_mean(slopecount,2))./SPDvar_mean(slopecount,3);
+%     SPDvar_mean(slopecount,:)= nanmedian(SPDvar,2);
+%     spemSI1(slopecount) = (SPDvar_mean(slopecount,3)-SPDvar_mean(slopecount,2))./SPDvar_mean(slopecount,3);
 %     spemSI2(slopecount) = (SPDvar_mean(slopecount,3)-SPDvar_mean(slopecount,2));
     slopecount = slopecount + 1;
 end
 %% Plots - Speed and Direction variance as a function of #neurons
 % 
 % 
-SPD(abs(SPD)>100) = nan;
-SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
-SPDvar_std = nanstd(SPDvar,[],2);
-SPDvar_mean = nanmedian(SPDvar,2);
-figure(1);hold on;hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000),'k','abshhxy', .3);
-hold on;plot(sizes, SPDvar_mean,'.k','MarkerSize',30);
-xlabel('size (degree)');ylabel('standard deviation (degree)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
+% SPD(abs(SPD)>100) = nan;
+% SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],4));
+% SPDvar_std = nanstd(SPDvar,[],2);
+% SPDvar_mean = nanmedian(SPDvar,2);
+% figure(1);hold on;hh = ploterr(sizes, SPDvar_mean, [], SPDvar_std./sqrt(1000),'k','abshhxy', .3);
+% hold on;plot(sizes, SPDvar_mean,'.k','MarkerSize',30);
+% xlabel('size (degree)');ylabel('standard deviation (degree)');%legend(num2str(0),num2str(0.09),num2str(0.18),num2str(0.27),num2str(0.36),num2str(0.45))
 
 % SPD(abs(SPD)>100) = nan;
 % SPDmean = squeeze(nanmean(SPD(:,:,:,:),4));

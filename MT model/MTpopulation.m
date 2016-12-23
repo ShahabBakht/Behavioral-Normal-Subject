@@ -14,7 +14,7 @@ MaxDirection = 359;
 
 % paramDist = LoadMTdata();
 CurrentFolder = pwd;
-cd('D:\Project Codes\Behavioral-Normal-Subject\MT model\DaveData');
+cd('/Users/shahab/MNI/Project-Codes/Behavioral-Normal-Subject/MT model/DaveData');
 data = load('paramDist.mat');
 cd(CurrentFolder);
 paramDist = data.paramDist;
@@ -74,7 +74,7 @@ for neuroncount = 1:NumNeurons
 %     S.B       =       [];
 %     S.nB      =       [];
 %     S.SI      =       [];
-    S.G       =       1;%8;%.1;%100;4             % Gain
+    S.G       =       2.5;%8;%.1;%100;4             % Gain
     S.B0      =       0;%2;                       % Base line activity
     S.rfloc = RFLocations(neuroncount);            % Location of the receptive field (degree)
     
