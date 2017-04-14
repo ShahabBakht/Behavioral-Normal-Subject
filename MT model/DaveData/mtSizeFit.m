@@ -1,4 +1,4 @@
-function [a,si,fitType,resnorm]=mtSizeFit(x,y,force)
+function [a,si,fitType]=mtSizeFit(x,y,force)
 % a(1) = excitation amplitude
 % a(2) = excitation size
 % a(3) = inhibition amplitude

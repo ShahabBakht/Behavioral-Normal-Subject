@@ -85,7 +85,7 @@ end
 
 SPD(abs(SPD)>100) = nan;
 SPDvar = squeeze(nanstd(SPD(:,:,:,:),[],3));
-SuppIdx = SPDvar(1,:)./SPDvar(2,:);
+SuppIdx = nanmedian(SPDvar(1,:))./nanmedian(SPDvar(2,:));
 
 
 fprintf('| \n')

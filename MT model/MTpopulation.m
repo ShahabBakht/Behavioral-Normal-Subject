@@ -29,20 +29,20 @@ paramDist = data.paramDist;
 % PDs = MinDirection:(MaxDirection - MinDirection)/Npd:(MaxDirection - (MaxDirection - MinDirection)/Npd);
 
 % [PSmesh, PDmesh] = meshgrid(PSs,PDs);
-% PSmesh = rand(1,Nps * Npd)*(log2(MaxSpeed) - log2(MinSpeed)) + log2(MinSpeed);
-% PDmesh = rand(1,Npd * Nps)*(MaxDirection - MinDirection) + MinDirection;
-PSmesh = randi((log2(MaxSpeed) - log2(MinSpeed))+1,1,Nps * Npd) - 2;
-PDmesh = randi(((MaxDirection - MinDirection)+1)/8,1,Npd * Nps)*8 - 1 + MinDirection;
+PSmesh = rand(1,Nps * Npd)*(log2(MaxSpeed) - log2(MinSpeed)) + log2(MinSpeed);
+PDmesh = rand(1,Npd * Nps)*(MaxDirection - MinDirection) + MinDirection;
+% PSmesh = randi((log2(MaxSpeed) - log2(MinSpeed))+1,1,Nps * Npd) - 2;
+% PDmesh = randi(((MaxDirection - MinDirection)+1)/8,1,Npd * Nps)*8 - 1 + MinDirection;
 % NumNeurons = size(PSs,2)*size(PDs,2);
 NumNeurons = length(PSmesh);
 RFLocations = setRFLocations(Target);
-% tic;
+tic;
 % simulate population firing rate and variance
 mtpopulation = cell(1,NumNeurons);
 for neuroncount = 1:NumNeurons
-%     if neuroncount == NumNeurons
-%         fprintf([num2str(neuroncount), ' neurons simulated \n'])
-%     end
+    if neuroncount == NumNeurons
+        fprintf([num2str(neuroncount), ' neurons simulated \n'])
+    end
     S.PS      =       PSmesh(neuroncount);      % Preferred Speed
     S.PD      =       PDmesh(neuroncount);      % Preferred Direction
     S.STW     =       (1.5);                    % Width of Speed Tuning Curve 1.45
@@ -74,7 +74,7 @@ for neuroncount = 1:NumNeurons
 %     S.B       =       [];
 %     S.nB      =       [];
 %     S.SI      =       [];
-    S.G       =       2.5;%8;%.1;%100;4             % Gain
+    S.G       =       1;%8;%.1;%100;4             % Gain
     S.B0      =       0;%2;                       % Base line activity
     S.rfloc = RFLocations(neuroncount);            % Location of the receptive field (degree)
     
@@ -85,7 +85,7 @@ for neuroncount = 1:NumNeurons
     mtpopulation{neuroncount} = MT;
     clear MT S
 end
-% fprintf('------------------------------------------ \n')
+fprintf('------------------------------------------ \n')
 COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS);
 
 % R = nan(Nps*Npd,NumTrials);
@@ -94,7 +94,7 @@ R = MCsimulate(mtpopulation,COV)';
 % R = MCsimulate(mtpopulation,COV,NumTrials)';
 
 
-% toc;
+toc;
 end
 
 function RFLocations = setRFLocations(Target)
@@ -132,7 +132,7 @@ function COV = ConstructCovariance(mtpopulation,rmax,tauD,tauS)
 
 global Nps Npd MinSpeed MaxSpeed NumNeurons;
 
-% fprintf(['Calculating Covariance Matrix ... '])
+fprintf(['Calculating Covariance Matrix ... '])
 PD = cellfun(@(x)(x.PreferredDirection),mtpopulation)';
 PS = cellfun(@(x)(x.PreferredSpeed),mtpopulation)';
 % rOnDiag = cellfun(@(x)(x.Variance),mtpopulation).^0.5;
@@ -165,9 +165,9 @@ coeff_ss = (SI1 + SI2)./max(max(SI1 + SI2));
 % coeff_ss(SI1>median(SI) & SI2>median(SI)) = .4*randn(size(coeff_ss(SI1>median(SI) & SI2>median(SI))))+.6;
 % coeff_ss(xor(SI1<median(SI),SI2<median(SI))) = .4*randn(size(coeff_ss(xor(SI1<median(SI),SI2<median(SI))))) + .3;
 % coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = .4*rand(size(coeff_ss(SI1<=median(SI) & SI2<=median(SI))));
-coeff_ss(SI1>median(SI) & SI2>median(SI)) = .2*randn(size(coeff_ss(SI1>median(SI) & SI2>median(SI))))+.8;
-coeff_ss(xor(SI1<median(SI),SI2<median(SI))) = .5*randn(size(coeff_ss(xor(SI1<median(SI),SI2<median(SI))))) + .3;
-coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = .4*rand(size(coeff_ss(SI1<=median(SI) & SI2<=median(SI))));
+% coeff_ss(SI1>median(SI) & SI2>median(SI)) = .2*randn(size(coeff_ss(SI1>median(SI) & SI2>median(SI))))+.8;
+% coeff_ss(xor(SI1<median(SI),SI2<median(SI))) = .5*randn(size(coeff_ss(xor(SI1<median(SI),SI2<median(SI))))) + .3;
+% coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = .4*rand(size(coeff_ss(SI1<=median(SI) & SI2<=median(SI))));
 
 % coeff_ss hard threshold
 % coeff_ss(SI1>median(SI) & SI2>median(SI)) = 1;
@@ -175,7 +175,7 @@ coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = .4*rand(size(coeff_ss(SI1<=median(
 % coeff_ss(SI1<=median(SI) & SI2<=median(SI)) = 0;
 
 % coeff_ss zero
-% coeff_ss = zeros(size(coeff_ss));
+coeff_ss = zeros(size(coeff_ss));
 % coeff_ss = 1.3 * (max(maxx(SI1 + SI2)) - SI1 - SI2 - 2);
 
 % SI-independent correlation matrix

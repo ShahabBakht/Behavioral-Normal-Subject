@@ -1,6 +1,6 @@
 %% Number of neurons as a function of stimulus size
 
-sizes=sqrt(0)+[1,3,10];%(.2:2:10.2); % the avg eccentricity of the stimuli is sqrt(5) deg
+sizes=sqrt(0)+(.2:1:10.2); %[1,3,10];% the avg eccentricity of the stimuli is sqrt(5) deg
 popSize=zeros(1,3);
 errSize=zeros(1,3); % reviewer #2 asked us to calculate the error of our estimates
 % fun=@(x1) (1.14*x1.^-0.76); % Albright & Desimone 87 Exp Brain Res (mm/deg)
@@ -44,13 +44,13 @@ tauS = .5;
 %     sizes(end-2) * ones(500,1); sizes(end-1) * ones(500,1); ...
 %     sizes(end) * ones(500,1)];
 slopecount = 1;
-for slope =  100%[0,.2,.5,1,2,5,10,20,40,100,1e4]
+for slope =  0%[0,.2,.5,1,2,5,10,20,40,100,1e4]
     % set decoding parameters -  read-out
     param(1) = 2;
     param(2) = slope;
     param(3) = .5;
     rmax = .25;
-    for trial = 1:50
+    for trial = 1:5000
         Target.MotionSpeed = 15 * ones(1000,1);
         Target.MotionDirection = 0 * ones(1000,1);
         
@@ -98,19 +98,22 @@ for slope =  100%[0,.2,.5,1,2,5,10,20,40,100,1e4]
             FiringRate_sum(k,j,trial,:) = sum(real(R),1);
             FiringRate_mean(k,j,trial,:) = nanmean(real(R),1);
             SI = cellfun(@(x)(x.SuppressionIndex),mtpopulation);
+            RF = cellfun(@(x)(x.RFLocation),mtpopulation);
             
             FR_sum_ss(k,j,trial,:) = sum(real(R(SI>quantile(SI,.4),:)),1);
             FR_sum_nss(k,j,trial,:) = sum(real(R(SI<=quantile(SI,.4),:)),1);
             FR_mean_ss(k,j,trial,:) = nanmean(real(R(SI>quantile(SI,.4),:)),1);
             FR_mean_nss(k,j,trial,:) = nanmean(real(R(SI<=quantile(SI,.4),:)),1);
+            FR_ss{k,j,trial} = real(R(SI>quantile(SI,.4),:));
+            FR_nss{k,j,trial} = real(R(SI<=quantile(SI,.4),:));
             
             
             COVss(k,j,trial) = mean2(COVest(SI>quantile(SI,.4),SI>quantile(SI,.4)));
             COVnss(k,j,trial) = mean2(COVest(SI<=quantile(SI,.4),SI<=quantile(SI,.4)));
             
-            SNRnss(k,j,trial) = nanmean(sum(real(R(SI<=quantile(SI,.4),:)),1))./sqrt(sum(sum(triu(COVest(SI<=quantile(SI,.4),SI<=quantile(SI,.4))))));
-            SNRss(k,j,trial) = nanmean(sum(real(R(SI>quantile(SI,.4),:)),1))./sqrt(sum(sum(triu(COVest(SI>quantile(SI,.4),SI>quantile(SI,.4))))));
-            SNR(k,j,trial) = nanmean(sum(real(R),1))./sqrt(sum(sum(triu(COVest))));
+            SNRnss(k,j,trial) = nanmean(sum(real(R(SI<=quantile(SI,.5) & RF<=2,:)),1))./sqrt(sum(sum(triu(COVest(SI<=quantile(SI,.5)& RF<=2,SI<=quantile(SI,.5)& RF<=2)))));
+            SNRss(k,j,trial) = nanmean(sum(real(R(SI>quantile(SI,.5) & RF<=2,:)),1))./sqrt(sum(sum(triu(COVest(SI>quantile(SI,.5)& RF<=2,SI>quantile(SI,.5)& RF<=2)))));
+            SNR(k,j,trial) = nanmean(sum(real(R(RF<=2,:)),1))./sqrt(sum(sum(triu(COVest))));
             
             
             
@@ -411,4 +414,11 @@ end
 % 
 % end
 % end
+
+
+%%
+mdl = LinearModel.fit(2*sizes(1:3),SPDvar15m(1:3) - min(SPDvar15m));
+predictSPD15_1 = mdl.predict((2*sizes(1):0.0001:4.324)');
+mdl = LinearModel.fit(2*sizes(3:end),SPDvar15m(3:end) - min(SPDvar15m));
+predictSPD15_2 = mdl.predict((4.324:0.0001:2*sizes(end))');
 
